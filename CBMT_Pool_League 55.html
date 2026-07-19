@@ -1,0 +1,4155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The CBMT Singles Pool League</title>
+<meta name="description" content="The CBMT Singles Pool League — Live Standings, Fixtures and Results">
+<meta name="theme-color" content="#0d1f15">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CBMT League">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1a6b3a;
+    --green-light: #2d9653;
+    --green-dark: #0f3d21;
+    --felt: #1e7a45;
+    --gold: #d4a017;
+    --gold-light: #f0c040;
+    --cream: #f5f0e8;
+    --dark: #0d1f15;
+    --mid: #1a3025;
+    --text: #e8f0eb;
+    --text-dim: #8aab96;
+    --red: #c0392b;
+    --white: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(26,107,58,0.3) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(26,107,58,0.2) 0%, transparent 60%);
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, var(--green-dark) 0%, var(--dark) 100%);
+    border-bottom: 3px solid var(--gold);
+    padding: 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .league-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(20px, 4vw, 32px);
+    letter-spacing: 2px;
+    color: var(--gold-light);
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    line-height: 1;
+  }
+  .league-title span { color: var(--white); }
+
+  /* NAV */
+  nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  nav button {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  nav button:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+  nav button.active {
+    background: var(--green);
+    color: var(--gold-light);
+    border-color: var(--gold);
+  }
+
+  /* HAMBURGER MENU */
+  .hamburger-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(212,160,23,0.3);
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 6px;
+    flex-shrink: 0;
+  }
+  .hamburger-btn span {
+    display: block;
+    height: 2px;
+    background: var(--gold-light);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+  .hamburger-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger-btn.open span:nth-child(2) { opacity: 0; }
+  .hamburger-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 200;
+    overflow-y: auto;
+  }
+  .mobile-menu.open { display: block; }
+  .mobile-menu-inner {
+    background: linear-gradient(135deg, var(--green-dark), var(--dark));
+    border-bottom: 3px solid var(--gold);
+    padding: 16px;
+    padding-top: 70px;
+  }
+  .mobile-menu-inner button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 14px 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    color: var(--text-dim);
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+  }
+  .mobile-menu-inner button:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+  .mobile-menu-inner button.active {
+    color: var(--gold-light);
+    background: rgba(26,107,58,0.2);
+  }
+  .mobile-menu-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 28px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px 10px;
+  }
+
+  @media (max-width: 768px) {
+    nav { display: none; }
+    .hamburger-btn { display: flex; }
+    .header-inner { flex-wrap: nowrap; }
+    .league-title { font-size: 18px; }
+  }
+
+  /* MAIN */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px 20px;
+  }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* SECTION HEADER */
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 3px;
+    color: var(--gold-light);
+    border-bottom: 2px solid var(--green);
+    padding-bottom: 10px;
+    margin-bottom: 24px;
+  }
+
+  /* CARD */
+  .card {
+    background: linear-gradient(135deg, var(--mid) 0%, rgba(26,48,37,0.8) 100%);
+    border: 1px solid rgba(212,160,23,0.2);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  /* STANDINGS TABLE */
+  .standings-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+  }
+  .standings-table th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--green);
+    background: rgba(0,0,0,0.2);
+  }
+  .standings-table td {
+    padding: 11px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    vertical-align: middle;
+  }
+  .standings-table tr:hover td { background: rgba(26,107,58,0.15); }
+  .standings-table tr:first-child td { padding-top: 13px; }
+
+  .pos-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 13px;
+    background: var(--mid);
+    color: var(--text-dim);
+  }
+  .pos-1 { background: var(--gold); color: var(--dark); }
+  .pos-2 { background: #9e9e9e; color: var(--dark); }
+  .pos-3 { background: #cd7f32; color: var(--dark); }
+  .pos-4 { background: transparent; color: var(--gold); border: 2px solid var(--gold); font-size: 11px; }
+  .pos-5 { background: transparent; color: #9e9e9e; border: 2px solid #9e9e9e; font-size: 11px; }
+
+  .player-name-cell { font-weight: 600; }
+  .wins-cell { color: var(--green-light); font-weight: 700; font-size: 16px; }
+
+  /* FIXTURES */
+  .round-header {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin: 20px 0 10px;
+    padding: 8px 14px;
+    background: rgba(0,0,0,0.3);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .fixture-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--mid);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 6px;
+    margin-bottom: 8px;
+    transition: border-color 0.2s;
+  }
+  .fixture-row:hover { border-color: rgba(212,160,23,0.3); }
+  .fixture-row.completed { opacity: 0.6; }
+  .fixture-row.completed .fixture-score { color: var(--gold-light); font-weight: 700; }
+
+  .fixture-player { font-weight: 600; font-size: 15px; flex: 1; }
+  .fixture-player.right { text-align: right; }
+  .fixture-vs {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--text-dim);
+    padding: 0 16px;
+    min-width: 60px;
+    text-align: center;
+  }
+  .fixture-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--green-light);
+    min-width: 60px;
+    text-align: center;
+  }
+  .winner-highlight { color: var(--gold-light); }
+
+  /* MATCH NIGHT */
+  .matchnight-section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 20px 0 10px;
+    padding: 6px 12px;
+    background: rgba(0,0,0,0.3);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 4px 4px 0;
+  }
+
+  /* AWARDS */
+  .awards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .award-card {
+    background: linear-gradient(135deg, var(--mid), rgba(26,48,37,0.6));
+    border: 1px solid rgba(212,160,23,0.25);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+  .award-card:hover { border-color: var(--gold); }
+  .award-emoji { font-size: 36px; margin-bottom: 8px; }
+  .award-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .award-winner {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: var(--text);
+    letter-spacing: 1px;
+  }
+  .award-detail { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
+
+  /* RIVALRIES */
+  .rivalry-card {
+    background: var(--mid);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .rivalry-players {
+    flex: 1;
+    font-weight: 700;
+    font-size: 16px;
+    min-width: 200px;
+  }
+  .rivalry-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--gold-light);
+    min-width: 80px;
+    text-align: center;
+  }
+  .rivalry-badge {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: rgba(212,160,23,0.15);
+    border: 1px solid rgba(212,160,23,0.3);
+    color: var(--gold-light);
+  }
+
+  /* FLUKES */
+  @media (max-width: 680px) {
+    .flukes-top-grid { grid-template-columns: 1fr !important; }
+  }
+  .fluke-history-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--mid);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 6px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .fluke-ball {
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .fluke-player-name { font-weight: 700; font-size: 15px; flex: 1; }
+  .fluke-count {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--gold-light);
+  }
+  .fluke-note { font-size: 12px; color: var(--text-dim); width: 100%; margin-top: 2px; font-style: italic; }
+  .fluke-date { font-size: 11px; color: var(--text-dim); white-space: nowrap; }
+
+  /* KILLER */
+  @media (max-width: 680px) {
+    .killer-top-grid { grid-template-columns: 1fr !important; }
+  }
+  .killer-history-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--mid);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 6px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .killer-history-round {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+    min-width: 80px;
+  }
+  .killer-history-winner {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--green-light);
+    flex: 1;
+  }
+  .killer-history-pot {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--gold-light);
+  }
+  .killer-history-players {
+    font-size: 12px;
+    color: var(--text-dim);
+    width: 100%;
+    margin-top: 2px;
+  }
+  .net-positive { color: var(--green-light); font-weight: 700; }
+  .net-negative { color: var(--red); font-weight: 700; }
+  .net-zero { color: var(--text-dim); }
+
+  /* ODDS */
+  .odds-matchup {
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .odds-player-block {
+    flex: 1;
+    min-width: 140px;
+    background: rgba(0,0,0,0.25);
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+  .odds-player-name { font-weight: 700; font-size: 16px; margin-bottom: 8px; }
+  .odds-fraction {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    line-height: 1;
+    color: var(--gold-light);
+  }
+  .odds-pct { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+  .odds-favourite {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--green-light);
+    background: rgba(45,150,83,0.15);
+    border: 1px solid rgba(45,150,83,0.3);
+    border-radius: 20px;
+    padding: 2px 10px;
+    margin-top: 6px;
+    display: inline-block;
+  }
+  .season-odds-table { width: 100%; border-collapse: collapse; }
+  .season-odds-table th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--green);
+    background: rgba(0,0,0,0.2);
+  }
+  .season-odds-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 14px;
+  }
+  .season-odds-table tr:hover td { background: rgba(26,107,58,0.1); }
+  .odds-cell {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--gold-light);
+  }
+  .odds-cell.long { color: var(--text-dim); font-size: 16px; }
+
+  /* STREAKS */
+  .streak-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    background: var(--mid);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .streak-name {
+    font-weight: 700;
+    font-size: 15px;
+    min-width: 150px;
+    flex: 1;
+  }
+  .streak-balls {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-left: auto;
+  }
+  .streak-ball {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 800;
+    flex-shrink: 0;
+    box-shadow: inset 0 -2px 4px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.3);
+  }
+  .streak-ball.win {
+    background: radial-gradient(circle at 35% 35%, #5ddb7a, #1a7a35);
+    color: white;
+  }
+  .streak-ball.loss {
+    background: radial-gradient(circle at 35% 35%, #e05c5c, #8b1a1a);
+    color: white;
+  }
+  .streak-ball.empty {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .streak-summary {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+  .streak-current {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .streak-current.hot { background: rgba(45,150,83,0.2); color: var(--green-light); border: 1px solid rgba(45,150,83,0.4); }
+  .streak-current.cold { background: rgba(192,57,43,0.2); color: #e88; border: 1px solid rgba(192,57,43,0.4); }
+  .streak-current.neutral { background: rgba(255,255,255,0.05); color: var(--text-dim); border: 1px solid rgba(255,255,255,0.1); }
+  .catchup-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+    background: var(--red);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    margin-left: 5px;
+    vertical-align: middle;
+    line-height: 18px;
+  }
+  .fixture-row.moved-to-catchup {
+    opacity: 0.45;
+    border-style: dashed;
+    border-color: rgba(212,160,23,0.25);
+  }
+  .moved-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 2px 8px;
+    border: 1px solid rgba(212,160,23,0.4);
+    border-radius: 10px;
+    white-space: nowrap;
+    margin-left: 8px;
+  }
+  .catchup-origin {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-left: 8px;
+    white-space: nowrap;
+  }
+
+  /* BULK RESULT ENTRY */
+  .bulk-fixture-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--mid);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 6px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .bulk-fixture-row.saved {
+    border-color: rgba(45,150,83,0.5);
+    background: rgba(45,150,83,0.08);
+  }
+  .bulk-fixture-names {
+    flex: 1;
+    font-weight: 600;
+    font-size: 14px;
+    min-width: 180px;
+  }
+  .bulk-winner-select {
+    flex: 1;
+    min-width: 160px;
+    background: var(--dark);
+    border: 1px solid rgba(212,160,23,0.3);
+    color: var(--text);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .bulk-winner-select:focus { outline: none; border-color: var(--gold); }
+  .bulk-saved-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--green-light);
+    white-space: nowrap;
+  }
+
+  /* PLAYER PROFILES */
+  .players-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+  .player-card {
+    background: var(--mid);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .player-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  }
+  .player-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--gold-light);
+    margin: 0 auto 12px;
+    border: 2px solid rgba(212,160,23,0.3);
+  }
+  .player-card-name { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+  .player-card-stats { font-size: 13px; color: var(--text-dim); }
+  .player-card-wins { color: var(--green-light); font-weight: 700; font-size: 18px; }
+
+  /* PLAYER MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: linear-gradient(135deg, var(--mid), var(--dark));
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+  }
+  .modal-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal-player-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--gold-light);
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .stat-box {
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+  }
+  .stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    color: var(--gold-light);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+  .h2h-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .h2h-table th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--green);
+    text-align: left;
+  }
+  .h2h-table td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .h2h-table tr:hover td { background: rgba(255,255,255,0.03); }
+  .h2h-win { color: var(--green-light); font-weight: 700; }
+  .h2h-loss { color: var(--red); }
+
+  /* HEAD TO HEAD */
+  .h2h-selectors { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 24px; }
+  .h2h-selectors select {
+    flex: 1;
+    min-width: 160px;
+    background: var(--mid);
+    color: var(--text);
+    border: 1px solid rgba(212,160,23,0.3);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .h2h-vs-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--text-dim);
+  }
+  .h2h-result-card {
+    background: var(--mid);
+    border-radius: 10px;
+    padding: 24px;
+    text-align: center;
+  }
+  .h2h-score-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+  }
+  .h2h-player-block { flex: 1; }
+  .h2h-player-block-name { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .h2h-player-block-wins {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 60px;
+    color: var(--gold-light);
+    line-height: 1;
+  }
+  .h2h-divider {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--text-dim);
+  }
+  .h2h-matches-list { margin-top: 20px; }
+  .h2h-match-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 14px;
+  }
+
+  /* ADMIN */
+  .admin-login { max-width: 360px; margin: 0 auto; text-align: center; }
+  .admin-login input {
+    width: 100%;
+    background: var(--mid);
+    border: 1px solid rgba(212,160,23,0.3);
+    color: var(--text);
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-family: 'Barlow', sans-serif;
+    margin-bottom: 12px;
+    letter-spacing: 2px;
+  }
+  .admin-login input:focus { outline: none; border-color: var(--gold); }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+  .btn-primary { background: var(--green); color: var(--gold-light); border: 1px solid var(--gold); }
+  .btn-primary:hover { background: var(--green-light); }
+  .btn-danger { background: var(--red); color: white; }
+  .btn-danger:hover { opacity: 0.85; }
+  .btn-secondary { background: var(--mid); color: var(--text); border: 1px solid rgba(255,255,255,0.15); }
+  .btn-secondary:hover { border-color: var(--gold); }
+  .btn-gold { background: var(--gold); color: var(--dark); font-weight: 800; }
+  .btn-gold:hover { background: var(--gold-light); }
+
+  /* RESULT ENTRY */
+  .result-form { max-width: 500px; }
+  .form-group { margin-bottom: 16px; }
+  .form-label {
+    display: block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .form-select, .form-input {
+    width: 100%;
+    background: var(--mid);
+    border: 1px solid rgba(212,160,23,0.2);
+    color: var(--text);
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: 'Barlow', sans-serif;
+    cursor: pointer;
+  }
+  .form-select:focus, .form-input:focus { outline: none; border-color: var(--gold); }
+
+  /* PLAYER MANAGEMENT */
+  .player-management-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 680px) {
+    .player-management-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(3, 1fr); }
+    .h2h-selectors { flex-direction: column; }
+    .h2h-selectors select { width: 100%; }
+  }
+
+  .player-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    gap: 8px;
+  }
+  .player-list-item:hover { background: rgba(255,255,255,0.03); }
+  .player-list-name { font-weight: 600; font-size: 14px; flex: 1; }
+  .badge-active {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+    background: rgba(45,150,83,0.2);
+    color: var(--green-light);
+    border: 1px solid rgba(45,150,83,0.4);
+  }
+  .badge-inactive {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.05);
+    color: var(--text-dim);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .scrollable-list {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 6px;
+  }
+  .scrollable-list::-webkit-scrollbar { width: 6px; }
+  .scrollable-list::-webkit-scrollbar-track { background: var(--dark); }
+  .scrollable-list::-webkit-scrollbar-thumb { background: var(--green); border-radius: 3px; }
+
+  .alert {
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .alert-success { background: rgba(45,150,83,0.2); border: 1px solid rgba(45,150,83,0.4); color: #7ee8a2; }
+  .alert-error { background: rgba(192,57,43,0.2); border: 1px solid rgba(192,57,43,0.4); color: #f1948a; }
+  .alert-info { background: rgba(212,160,23,0.15); border: 1px solid rgba(212,160,23,0.3); color: var(--gold-light); }
+
+  .sync-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-dim);
+    padding: 4px 10px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 20px;
+  }
+  .sync-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green-light);
+    animation: pulse 2s infinite;
+  }
+  .sync-dot.offline { background: var(--red); animation: none; }
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* PWA INSTALL PROMPT */
+  .install-banner {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--green-dark), var(--mid));
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    padding: 14px 20px;
+    z-index: 500;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    align-items: center;
+    gap: 14px;
+    max-width: 380px;
+    width: calc(100% - 40px);
+  }
+  /* Only show install banner on mobile */
+  @media (max-width: 768px) {
+    .install-banner.show { display: flex; }
+  }
+  .install-banner-text { flex: 1; font-size: 14px; font-weight: 600; }
+  .install-banner-text span { display: block; font-size: 12px; color: var(--text-dim); font-weight: 400; margin-top: 2px; }
+
+  /* SEASON MANAGEMENT */
+  .season-badge {
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: rgba(212,160,23,0.15);
+    border: 1px solid rgba(212,160,23,0.3);
+    color: var(--gold-light);
+    margin-left: 12px;
+    vertical-align: middle;
+  }
+
+  .divider { border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 20px 0; }
+
+  .text-muted { color: var(--text-dim); font-size: 14px; }
+
+  /* Confirmation modal */
+  .confirm-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 300;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .confirm-modal.open { display: flex; }
+  .confirm-box {
+    background: var(--mid);
+    border: 1px solid var(--gold);
+    border-radius: 10px;
+    padding: 28px;
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+  }
+  .confirm-box h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    color: var(--gold-light);
+    margin-bottom: 12px;
+  }
+  .confirm-box p { color: var(--text-dim); font-size: 14px; margin-bottom: 20px; }
+  .confirm-actions { display: flex; gap: 10px; justify-content: center; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="league-title">The CBMT <span>Singles Pool League</span></div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="sync-status" id="syncStatus">
+        <div class="sync-dot" id="syncDot"></div>
+        <span id="syncLabel">Connecting...</span>
+      </div>
+      <nav>
+        <button class="active" onclick="showSection('standings')">Standings</button>
+        <button onclick="showSection('fixtures')">Fixtures</button>
+        <button onclick="showSection('players')">Players</button>
+        <button onclick="showSection('catchups')" id="navCatchups">Catch Ups<span id="catchupBadge" class="catchup-badge" style="display:none">0</span></button>
+        <button onclick="showSection('streaks')">Streaks</button>
+        <button onclick="showSection('odds')">Odds</button>
+        <button onclick="showSection('matchnight')">Match Night</button>
+        <button onclick="showSection('awards')">Awards</button>
+        <button onclick="showSection('admin')">Admin</button>
+      </nav>
+      <!-- Hamburger button (mobile only) -->
+      <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleMobileMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-inner" style="position:relative;">
+    <button class="mobile-menu-close" onclick="toggleMobileMenu()">×</button>
+    <button class="active" id="mob-standings" onclick="showSection('standings')">Standings</button>
+    <button id="mob-fixtures" onclick="showSection('fixtures')">Fixtures</button>
+    <button id="mob-players" onclick="showSection('players')">Players</button>
+    <button id="mob-catchups" onclick="showSection('catchups')">Catch Ups <span id="catchupBadgeMob" class="catchup-badge" style="display:none">0</span></button>
+    <button id="mob-streaks" onclick="showSection('streaks')">Streaks</button>
+    <button id="mob-odds" onclick="showSection('odds')">Odds</button>
+    <button id="mob-matchnight" onclick="showSection('matchnight')">Match Night</button>
+    <button id="mob-awards" onclick="showSection('awards')">Awards</button>
+    <button id="mob-admin" onclick="showSection('admin')">Admin</button>
+  </div>
+</div>
+
+<main>
+
+  <!-- STANDINGS -->
+  <div id="sec-standings" class="section active">
+    <div class="section-title">Standings <span id="seasonBadge" class="season-badge"></span></div>
+    <div class="card">
+      <table class="standings-table" id="standingsTable">
+        <thead>
+          <tr>
+            <th style="width:44px">#</th>
+            <th>Player</th>
+            <th>P</th>
+            <th>W</th>
+            <th>L</th>
+            <th>Pts</th>
+            <th>Form</th>
+          </tr>
+        </thead>
+        <tbody id="standingsBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FIXTURES -->
+  <div id="sec-fixtures" class="section">
+    <div class="section-title">Fixtures & Results</div>
+    <div id="fixturesContainer"></div>
+  </div>
+
+  <!-- PLAYERS -->
+  <div id="sec-players" class="section">
+    <div class="section-title">Players</div>
+    <div class="players-grid" id="playersGrid"></div>
+  </div>
+
+  <!-- HEAD TO HEAD -->
+  <div id="sec-h2h" class="section">
+    <div class="section-title">Head to Head</div>
+    <div class="card">
+      <div class="h2h-selectors">
+        <select id="h2hPlayer1" onchange="updateH2H()">
+          <option value="">Select Player 1</option>
+        </select>
+        <div class="h2h-vs-label">VS</div>
+        <select id="h2hPlayer2" onchange="updateH2H()">
+          <option value="">Select Player 2</option>
+        </select>
+      </div>
+      <div id="h2hResult"></div>
+    </div>
+  </div>
+
+  <!-- MATCH NIGHT -->
+  <div id="sec-matchnight" class="section">
+    <div class="section-title">Match Night</div>
+    <div class="form-group" style="max-width:400px;margin-bottom:20px;">
+      <label class="form-label">Select Round</label>
+      <select id="matchnightRound" class="form-select" onchange="renderMatchNight()">
+        <option value="">Select Round</option>
+      </select>
+    </div>
+    <div id="matchnightContainer"></div>
+  </div>
+
+  <!-- AWARDS -->
+  <div id="sec-awards" class="section">
+    <div class="section-title">Awards 🏆</div>
+
+    <!-- Tab buttons -->
+    <div style="display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap;">
+      <button class="btn btn-primary" id="awards-tab-current" onclick="showAwardsTab('current')">Current Season</button>
+      <button class="btn btn-secondary" id="awards-tab-archive" onclick="showAwardsTab('archive')">Season Archive</button>
+    </div>
+
+    <!-- Current season awards -->
+    <div id="awards-current">
+      <div id="awardsContainer"></div>
+    </div>
+
+    <!-- Season archive -->
+    <div id="awards-archive" style="display:none;">
+      <div id="archiveContainer"></div>
+    </div>
+  </div>
+
+  <!-- RIVALRIES -->
+  <div id="sec-rivalries" class="section">
+    <div class="section-title">Rivalries</div>
+    <div class="text-muted" style="margin-bottom:20px;">The closest head-to-head battles of the season.</div>
+    <div id="rivalriesContainer"></div>
+  </div>
+
+  <!-- FLUKES -->
+  <div id="sec-flukes" class="section">
+    <div class="section-title">Flukey Cunts League 🎱</div>
+
+    <!-- Points key -->
+    <div class="card" style="margin-bottom:20px;">
+      <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:center;">
+        <div style="text-align:center;padding:10px 20px;background:rgba(0,0,0,0.2);border-radius:8px;border:1px solid rgba(255,0,0,0.3);">
+          <div style="font-size:28px;">🤯</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold-light);">3 pts</div>
+          <div style="font-size:12px;color:var(--text-dim);">Outrageous Fluke</div>
+        </div>
+        <div style="text-align:center;padding:10px 20px;background:rgba(0,0,0,0.2);border-radius:8px;border:1px solid rgba(212,160,23,0.3);">
+          <div style="font-size:28px;">😏</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold-light);">2 pts</div>
+          <div style="font-size:12px;color:var(--text-dim);">Lucky Fluke</div>
+        </div>
+        <div style="text-align:center;padding:10px 20px;background:rgba(0,0,0,0.2);border-radius:8px;border:1px solid rgba(45,150,83,0.3);">
+          <div style="font-size:28px;">🎱</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold-light);">1 pt</div>
+          <div style="font-size:12px;color:var(--text-dim);">Simple Fluke</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;" class="flukes-top-grid">
+
+      <!-- Fluke Leaderboard -->
+      <div class="card">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold-light);margin-bottom:16px;">Flukey Cunts League Table</div>
+        <table class="standings-table">
+          <thead>
+            <tr>
+              <th style="width:36px;">#</th>
+              <th>Player</th>
+              <th>🤯</th>
+              <th>😏</th>
+              <th>🎱</th>
+              <th>Pts</th>
+            </tr>
+          </thead>
+          <tbody id="flukesLeaderboardBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Add a Fluke — shown only when logged in -->
+      <div id="flukeAdminPanel">
+        <!-- Login gate -->
+        <div id="flukesLoginGate" class="card" style="text-align:center;">
+          <div style="font-size:36px;margin-bottom:8px;">🔒</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold-light);margin-bottom:12px;">Admin — Record a Fluke</div>
+          <input type="password" id="flukesPasswordInput" class="form-input" placeholder="Enter admin password" style="margin-bottom:10px;text-align:center;letter-spacing:3px;" onkeydown="if(event.key==='Enter')flukesLogin()">
+          <button class="btn btn-gold" onclick="flukesLogin()" style="width:100%;justify-content:center;">Login</button>
+          <div id="flukesLoginError" class="alert alert-error" style="display:none;margin-top:10px;">Incorrect password.</div>
+        </div>
+
+        <!-- Record form -->
+        <div id="flukesContent" class="card" style="display:none;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold-light);margin-bottom:16px;">Record a Fluke</div>
+          <div id="flukeAlert"></div>
+          <div class="form-group">
+            <label class="form-label">Player</label>
+            <select id="flukePlayer" class="form-select">
+              <option value="">Select Player</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Fluke Type</label>
+            <select id="flukeType" class="form-select">
+              <option value="outrageous">🤯 Outrageous Fluke (3 pts)</option>
+              <option value="lucky">😏 Lucky Fluke (2 pts)</option>
+              <option value="simple">🎱 Simple Fluke (1 pt)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Note (optional)</label>
+            <input type="text" id="flukeNote" class="form-input" placeholder="e.g. fluked the 8 ball in off two cushions">
+          </div>
+          <button class="btn btn-gold" onclick="addFluke()">🎱 Record Fluke</button>
+          <button class="btn btn-secondary" style="margin-top:8px;width:100%;justify-content:center;" onclick="flukesLogout()">Logout</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Fluke History -->
+    <div class="card">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold-light);margin-bottom:16px;">Fluke History</div>
+      <div id="flukeHistoryContainer"></div>
+    </div>
+  </div>
+
+  <!-- KILLER -->
+  <div id="sec-killer" class="section">
+    <div class="section-title">Killer</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;" class="killer-top-grid">
+
+      <!-- Season Totals -->
+      <div class="card">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold-light);margin-bottom:16px;">Season Totals</div>
+        <table class="standings-table" id="killerTotalsTable">
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Paid In</th>
+              <th>Won</th>
+              <th>Net</th>
+            </tr>
+          </thead>
+          <tbody id="killerTotalsBody"></tbody>
+        </table>
+      </div>
+
+      <!-- Record a Game -->
+      <div class="card">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold-light);margin-bottom:16px;">Record a Game</div>
+        <div id="killerGameAlert"></div>
+        <div class="form-group">
+          <label class="form-label">Round</label>
+          <select id="killerRound" class="form-select">
+            <option value="">Select Round</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Players Entered <span id="killerEntryCount" style="color:var(--text-dim);font-weight:400;">(0 selected · Pot: £0.00)</span></label>
+          <div class="scrollable-list" id="killerPlayerCheckboxes" style="max-height:220px;padding:8px;"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Winner</label>
+          <select id="killerWinner" class="form-select">
+            <option value="">Select Winner</option>
+          </select>
+        </div>
+        <button class="btn btn-gold" onclick="saveKillerGame()">Save Killer Game</button>
+      </div>
+    </div>
+
+    <!-- Game History -->
+    <div class="card">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold-light);margin-bottom:16px;">Game History</div>
+      <div id="killerHistoryContainer"></div>
+    </div>
+  </div>
+
+  <!-- ODDS -->
+  <div id="sec-odds" class="section">
+    <div class="section-title">Odds</div>
+    <div class="text-muted" style="margin-bottom:6px;font-size:13px;">⚠️ For entertainment purposes only. Based on current season win rate.</div>
+
+    <!-- Fixture Odds -->
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold-light);margin:20px 0 12px;letter-spacing:2px;">Fixture Odds</div>
+    <div class="card" style="margin-bottom:8px;">
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <div style="flex:1;min-width:140px;">
+          <label class="form-label">Player 1</label>
+          <select id="oddsPlayer1" class="form-select" onchange="updateFixtureOdds()">
+            <option value="">Select Player</option>
+          </select>
+        </div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--text-dim);padding-top:18px;">VS</div>
+        <div style="flex:1;min-width:140px;">
+          <label class="form-label">Player 2</label>
+          <select id="oddsPlayer2" class="form-select" onchange="updateFixtureOdds()">
+            <option value="">Select Player</option>
+          </select>
+        </div>
+      </div>
+      <div id="fixtureOddsResult" style="margin-top:16px;"></div>
+    </div>
+
+    <!-- Season Finish Odds -->
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold-light);margin:24px 0 12px;letter-spacing:2px;">Season Finish Odds</div>
+    <div class="text-muted" style="margin-bottom:12px;font-size:13px;">Probability of each player finishing in the top 5, based on current win rate and remaining fixtures.</div>
+    <div id="seasonOddsContainer"></div>
+  </div>
+
+  <!-- STREAKS -->
+  <div id="sec-streaks" class="section">
+    <div class="section-title">Form &amp; Streaks</div>
+    <div class="text-muted" style="margin-bottom:20px;">Last 10 games per player. Most recent on the left, oldest on the right.</div>
+    <div id="streaksContainer"></div>
+  </div>
+
+  <!-- CATCH UPS -->
+  <div id="sec-catchups" class="section">
+    <div class="section-title">Catch Ups</div>
+    <div id="catchupsContainer"></div>
+  </div>
+
+  <!-- ADMIN -->
+  <div id="sec-admin" class="section">
+    <div class="section-title">Admin</div>
+
+    <!-- Login -->
+    <div id="adminLogin" class="admin-login card">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold-light);margin-bottom:16px;">Admin Access</div>
+      <input type="password" id="adminPasswordInput" placeholder="Enter password" onkeydown="if(event.key==='Enter')adminLogin()">
+      <button class="btn btn-gold" onclick="adminLogin()" style="width:100%;justify-content:center;margin-top:4px;">Login</button>
+      <div id="loginError" class="alert alert-error" style="display:none;margin-top:12px;">Incorrect password.</div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:18px;color:var(--gold);">Logged in as Admin</div>
+        <button class="btn btn-secondary" onclick="adminLogout()">Logout</button>
+      </div>
+
+      <!-- Tabs -->
+      <div style="display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap;">
+        <button class="btn btn-primary" id="atab-results" onclick="showAdminTab('results')">Enter Results</button>
+        <button class="btn btn-secondary" id="atab-players" onclick="showAdminTab('players')">Manage Players</button>
+        <button class="btn btn-secondary" id="atab-season" onclick="showAdminTab('season')">Season</button>
+        <button class="btn btn-secondary" id="atab-archive" onclick="showAdminTab('archive')">Season Archive</button>
+      </div>
+
+      <!-- Enter Results -->
+      <div id="admin-results" class="card">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold-light);margin-bottom:16px;">Enter Results</div>
+        <div id="resultAlert"></div>
+        <div id="saveAllAlert" style="margin-bottom:12px;"></div>
+        <div class="form-group" style="max-width:400px;">
+          <label class="form-label">Select Round</label>
+          <select id="resultRound" class="form-select" onchange="setTimeout(populateAllFixtures, 300)">
+            <option value="">Select Round</option>
+          </select>
+        </div>
+        <div id="allFixturesContainer"></div>
+      </div>
+
+      <!-- Manage Players -->
+      <div id="admin-players" class="card" style="display:none;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold-light);margin-bottom:16px;">Manage Players</div>
+        <div id="playerAlert"></div>
+        <div class="player-management-grid">
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Master Player List <span id="masterCount" style="color:var(--text-dim)"></span></div>
+            <div class="scrollable-list" id="masterPlayerList"></div>
+            <div style="margin-top:12px;display:flex;gap:8px;">
+              <input class="form-input" id="newPlayerName" placeholder="New player name" style="flex:1;" onkeydown="if(event.key==='Enter')addPlayer()">
+              <button class="btn btn-primary" onclick="addPlayer()">Add</button>
+            </div>
+          </div>
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Active This Season <span id="activeCount" style="color:var(--text-dim)"></span></div>
+            <div class="text-muted" style="margin-bottom:10px;font-size:13px;">Toggle players on/off for the current season. Max 20 active.</div>
+            <div class="scrollable-list" id="activePlayerList"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Season Management -->
+      <div id="admin-season" class="card" style="display:none;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold-light);margin-bottom:16px;">Season Management</div>
+        <div id="seasonAlert"></div>
+        <div id="seasonInfo" style="margin-bottom:20px;"></div>
+        <hr class="divider">
+        <div style="margin-bottom:12px;">
+          <div style="font-weight:700;margin-bottom:6px;">Force Push Data to Cloud</div>
+          <div class="text-muted" style="margin-bottom:12px;">If devices are showing different data, use this on the device with the correct data to push it to all other devices.</div>
+          <button class="btn btn-gold" onclick="forcePushToCloud()">Push This Device's Data to Cloud</button>
+        </div>
+        <hr class="divider">
+        <div style="margin-bottom:12px;">
+          <div style="font-weight:700;margin-bottom:6px;">Reset for New Season</div>
+          <div class="text-muted" style="margin-bottom:12px;">Clears all results, schedule, killer games and catch ups. Keeps your full player bank intact. Use this when starting fresh.</div>
+          <button class="btn btn-danger" onclick="confirmResetLeague()">Reset League</button>
+        </div>
+        <hr class="divider">
+        <div style="margin-bottom:12px;">
+          <div style="font-weight:700;margin-bottom:6px;">Start New Season</div>
+          <div class="text-muted" style="margin-bottom:12px;">Generate a new round robin schedule for the active players (12-24). Fixtures play weekly from the start date.</div>
+          <div class="form-group" style="max-width:300px;">
+            <label class="form-label">Season Start Date</label>
+            <input type="date" id="seasonStartDate" class="form-input">
+          </div>
+          <div class="form-group" style="max-width:300px;">
+            <label class="form-label">Legs</label>
+            <select id="seasonLegs" class="form-select">
+              <option value="1">Single leg — each player plays everyone once</option>
+              <option value="2">Double leg — each player plays everyone twice</option>
+            </select>
+          </div>
+          <button class="btn btn-danger" onclick="confirmNewSeason()">Start New Season</button>
+        </div>
+        <hr class="divider">
+        <div style="margin-bottom:12px;">
+          <div style="font-weight:700;margin-bottom:6px;">📋 Print Fixture Sheet</div>
+          <div class="text-muted" style="margin-bottom:12px;">Generate a printable Excel spreadsheet of all fixtures for the season. Keep it behind the bar so results can be recorded manually.</div>
+          <button class="btn btn-gold" onclick="exportToExcel()">⬇️ Download Excel Sheet</button>
+        </div>
+        <hr class="divider">
+          <div class="text-muted" style="margin-bottom:12px;">Once a round's night has passed, move any unplayed fixtures to the Catch Ups page. They'll stay visible in their original round marked as moved.</div>
+          <div class="form-group" style="max-width:300px;">
+            <label class="form-label">Select Round</label>
+            <select id="catchupRoundSelect" class="form-select">
+              <option value="">Select Round</option>
+            </select>
+          </div>
+          <div id="catchupPreview" style="margin-bottom:12px;"></div>
+          <button class="btn btn-primary" onclick="moveToCatchUps()">Move Unplayed to Catch Ups</button>
+        </div>
+        <hr class="divider">
+          <div class="text-muted" style="margin-bottom:12px;">Remove an incorrectly entered result.</div>
+          <div class="result-form">
+            <div class="form-group">
+              <label class="form-label">Round</label>
+              <select id="deleteRound" class="form-select" onchange="populateDeleteFixtureSelect()">
+                <option value="">Select Round</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Fixture (completed only)</label>
+              <select id="deleteFixture" class="form-select">
+                <option value="">Select Fixture</option>
+              </select>
+            </div>
+            <button class="btn btn-danger" onclick="deleteResult()">Delete Result</button>
+          </div>
+        </div>
+      </div>
+      <!-- Season Archive Admin -->
+      <div id="admin-archive" class="card" style="display:none;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold-light);margin-bottom:16px;">Record Season Results</div>
+        <div id="archiveAlert"></div>
+        <div class="text-muted" style="margin-bottom:16px;">Snapshots the current final standings. Just enter prize money for top 5 and Killer King.</div>
+        <div class="form-group" style="max-width:300px;">
+          <label class="form-label">Season Name</label>
+          <input type="text" id="archiveSeason" class="form-input" placeholder="e.g. Spring/Summer 2026">
+        </div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Prize Money — Top 5</div>
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold-light);min-width:36px;">1st</span>
+          <span style="color:var(--gold-light);font-weight:700;">£</span>
+          <input type="number" id="archivePrize1" class="form-input" placeholder="Prize money" style="width:120px;" min="0" step="0.01">
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold-light);min-width:36px;">2nd</span>
+          <span style="color:var(--gold-light);font-weight:700;">£</span>
+          <input type="number" id="archivePrize2" class="form-input" placeholder="Prize money" style="width:120px;" min="0" step="0.01">
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold-light);min-width:36px;">3rd</span>
+          <span style="color:var(--gold-light);font-weight:700;">£</span>
+          <input type="number" id="archivePrize3" class="form-input" placeholder="Prize money" style="width:120px;" min="0" step="0.01">
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold-light);min-width:36px;">4th</span>
+          <span style="color:var(--gold-light);font-weight:700;">£</span>
+          <input type="number" id="archivePrize4" class="form-input" placeholder="Prize money" style="width:120px;" min="0" step="0.01">
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold-light);min-width:36px;">5th</span>
+          <span style="color:var(--gold-light);font-weight:700;">£</span>
+          <input type="number" id="archivePrize5" class="form-input" placeholder="Prize money" style="width:120px;" min="0" step="0.01">
+        </div>
+        <div class="form-group" style="margin-top:12px;">
+          <label class="form-label">Killer King</label>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <input type="text" id="archiveKillerKing" class="form-input" placeholder="Player name" style="flex:1;min-width:140px;">
+            <input type="number" id="archiveKillerWins" class="form-input" placeholder="No. of wins" style="width:110px;" min="0">
+          </div>
+        </div>
+        <button class="btn btn-gold" onclick="saveSeasonArchive()" style="margin-top:8px;">💾 Snapshot and Save Season</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Player Modal -->
+<div class="modal-overlay" id="playerModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closePlayerModal()">×</button>
+    <div id="playerModalContent"></div>
+  </div>
+</div>
+
+<!-- Confirm Modal -->
+<div class="confirm-modal" id="confirmModal">
+  <div class="confirm-box">
+    <h3 id="confirmTitle">Are you sure?</h3>
+    <p id="confirmMessage"></p>
+    <div class="confirm-actions">
+      <button class="btn btn-danger" id="confirmYes">Confirm</button>
+      <button class="btn btn-secondary" onclick="closeConfirm()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===================== DATA STORE =====================
+const STORAGE_KEY = 'cbmt_pool_league_v2';
+const ADMIN_PASSWORD = 'CBMT ADMIN';
+
+const DEFAULT_PLAYERS = [
+  "Eric Salt","Ryan Cooper","Jordan Wood","Steve Holtom","Matt Barham",
+  "Paul Laing","Pete Starling","Sam Hesford","Pete Davenport","Adam Grover",
+  "Chevy Rogers","Josh Manifold","Ben Richards","John Thornton","Stuart Wilson",
+  "Nate Bourne","Max Starling","Stuart Rogers","Mark Platt","Daniel Savage"
+];
+
+function defaultState() {
+  return {
+    season: 1,
+    masterPlayers: DEFAULT_PLAYERS.map((name, i) => ({ id: i + 1, name, active: false })),
+    nextPlayerId: DEFAULT_PLAYERS.length + 1,
+    schedule: [],
+    results: {},
+    seasonStarted: false,
+    seasonStartDate: null,
+    catchUps: [],
+    killerGames: [],
+    flukes: [],
+    seasonArchives: []
+  };
+}
+
+let state = defaultState();
+let adminLoggedIn = false;
+
+// ===================== FIREBASE CLOUD SYNC =====================
+const FIREBASE_URL = 'https://cbmtleague-default-rtdb.europe-west1.firebasedatabase.app/leagueState.json';
+let syncListener = null;
+let lastSaveTime = 0;
+let pendingSave = false;
+
+function updateSyncStatus(status) {
+  const dot = document.getElementById('syncDot');
+  const label = document.getElementById('syncLabel');
+  if(status === 'live') {
+    dot.className = 'sync-dot';
+    label.textContent = 'Live';
+  } else if(status === 'saving') {
+    dot.className = 'sync-dot';
+    label.textContent = 'Saving...';
+  } else {
+    dot.className = 'sync-dot offline';
+    label.textContent = 'Offline';
+  }
+}
+
+async function saveState() {
+  // Also save to localStorage as backup
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+
+  updateSyncStatus('saving');
+  try {
+    const response = await fetch(FIREBASE_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(state)
+    });
+    if(response.ok) {
+      updateSyncStatus('live');
+    } else {
+      updateSyncStatus('offline');
+    }
+  } catch(e) {
+    updateSyncStatus('offline');
+  }
+}
+
+async function loadState() {
+  updateSyncStatus('saving');
+  try {
+    const response = await fetch(FIREBASE_URL);
+    if(response.ok) {
+      const data = await response.json();
+      if(data && data.masterPlayers && data.masterPlayers.length > 0) {
+        state = data;
+        // Ensure all required fields exist
+        if(!state.catchUps) state.catchUps = [];
+        if(!state.results) state.results = {};
+        if(!state.schedule) state.schedule = [];
+        if(!state.season) state.season = 1;
+        if(!state.nextPlayerId) state.nextPlayerId = 21;
+        if(!state.killerGames) state.killerGames = [];
+        if(!state.flukes) state.flukes = [];
+        if(!state.seasonArchives) state.seasonArchives = [];
+        updateSyncStatus('live');
+      } else {
+        // No valid data in Firebase yet — use default and save it
+        state = defaultState();
+        generateSchedule(null);
+        await saveState();
+      }
+    } else {
+      throw new Error('Firebase fetch failed');
+    }
+  } catch(e) {
+    // Fall back to localStorage
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if(saved) {
+        state = JSON.parse(saved);
+        if(!state.catchUps) state.catchUps = [];
+        if(!state.results) state.results = {};
+      } else {
+        state = defaultState();
+        generateSchedule(null);
+      }
+    } catch(e2) {
+      state = defaultState();
+      generateSchedule(null);
+    }
+    updateSyncStatus('offline');
+  }
+  renderAll();
+}
+
+// Poll Firebase every 15 seconds for live updates on other devices
+window.pollInterval = setInterval(async () => {
+  try {
+    const response = await fetch(FIREBASE_URL);
+    if(response.ok) {
+      const data = await response.json();
+      if(data && data.season) {
+        state = data;
+        if(!state.catchUps) state.catchUps = [];
+        updateSyncStatus('live');
+        renderAll();
+      }
+    }
+  } catch(e) {}
+}, 15000);
+
+// ===================== SCHEDULE GENERATION =====================
+function generateSchedule(startDateStr, legs = 1) {
+  const activePlayers = state.masterPlayers.filter(p => p.active);
+  if(activePlayers.length < 12 || activePlayers.length > 24) return false;
+
+  // Shuffle players randomly
+  const shuffled = [...activePlayers].sort(() => Math.random() - 0.5);
+  const ids = shuffled.map(p => p.id);
+  const n = ids.length;
+  const isOdd = n % 2 !== 0;
+  const list = isOdd ? [...ids, null] : [...ids];
+  const total = list.length;
+  const singleLegRounds = [];
+
+  for(let r = 0; r < total - 1; r++) {
+    const round = [];
+    for(let i = 0; i < total / 2; i++) {
+      const home = list[i];
+      const away = list[total - 1 - i];
+      if(home !== null && away !== null) {
+        // Randomly swap home/away
+        if(Math.random() > 0.5) round.push({ home, away, id: `${r}_${i}` });
+        else round.push({ home: away, away: home, id: `${r}_${i}` });
+      }
+    }
+    // Shuffle fixture order within each round
+    round.sort(() => Math.random() - 0.5);
+
+    let roundDate = null;
+    if(startDateStr) {
+      const base = new Date(startDateStr + 'T00:00:00');
+      base.setDate(base.getDate() + r * 7);
+      roundDate = base.toISOString().split('T')[0];
+    }
+    if(round.length > 0) {
+      singleLegRounds.push({ fixtures: round, date: roundDate });
+    }
+    // Rotate keeping first fixed
+    const last = list.pop();
+    list.splice(1, 0, last);
+  }
+
+  // Shuffle round order for extra randomness
+  const shuffledRounds = [...singleLegRounds].sort(() => Math.random() - 0.5);
+  // But keep dates in order
+  shuffledRounds.forEach((round, i) => {
+    round.date = singleLegRounds[i].date;
+  });
+
+  let allRounds = [...shuffledRounds];
+  if(legs === 2) {
+    shuffledRounds.forEach((round, ri) => {
+      const reversedFixtures = round.fixtures.map((f, fi) => ({
+        home: f.away,
+        away: f.home,
+        id: `leg2_${ri}_${fi}`
+      })).sort(() => Math.random() - 0.5);
+      let roundDate = null;
+      if(startDateStr) {
+        const base = new Date(startDateStr + 'T00:00:00');
+        base.setDate(base.getDate() + (shuffledRounds.length + ri) * 7);
+        roundDate = base.toISOString().split('T')[0];
+      }
+      allRounds.push({ fixtures: reversedFixtures, date: roundDate });
+    });
+  }
+
+  state.schedule = allRounds;
+  state.seasonStartDate = startDateStr || null;
+  state.seasonLegs = legs;
+  state.results = {};
+  state.catchUps = [];
+  state.killerGames = [];
+  state.flukes = [];
+  state.seasonStarted = true;
+  return true;
+}
+
+function formatDate(dateStr) {
+  if(!dateStr) return '';
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+// ===================== STANDINGS =====================
+function getStandings() {
+  const activePlayers = state.masterPlayers.filter(p => p.active);
+  const stats = {};
+  activePlayers.forEach(p => {
+    stats[p.id] = { id: p.id, name: p.name, played: 0, won: 0, lost: 0, points: 0 };
+  });
+
+  Object.values(state.results).forEach(result => {
+    if(!result || !result.winnerId) return;
+    const { homeId, awayId, winnerId } = result;
+    if(stats[homeId]) { stats[homeId].played++; }
+    if(stats[awayId]) { stats[awayId].played++; }
+    if(stats[winnerId]) { stats[winnerId].won++; stats[winnerId].points++; }
+    const loserId = winnerId === homeId ? awayId : homeId;
+    if(stats[loserId]) { stats[loserId].lost++; }
+  });
+
+  return Object.values(stats).sort((a, b) => {
+    if(b.points !== a.points) return b.points - a.points;
+    if(b.won !== a.won) return b.won - a.won;
+    return a.name.localeCompare(b.name);
+  });
+}
+
+// ===================== RENDER ALL =====================
+function renderAll() {
+  renderStandings();
+  renderFixtures();
+  renderPlayers();
+  renderH2HDropdowns();
+  renderAdminFixtureSelects();
+  renderSeasonInfo();
+  renderMasterPlayerList();
+  renderCatchUps();
+  renderCatchUpRoundSelect();
+  renderStreaks();
+  renderKillerTotals();
+  renderKillerHistory();
+  renderKillerRoundSelect();
+  renderFlukeLeaderboard();
+  renderFlukeHistory();
+  renderMatchNightRoundSelect();
+  updateCatchUpBadge();
+  document.getElementById('seasonBadge').textContent = `Season ${state.season}`;
+}
+
+// ===================== STANDINGS =====================
+function renderStandings() {
+  const standings = getStandings();
+  const tbody = document.getElementById('standingsBody');
+  tbody.innerHTML = '';
+  standings.forEach((p, i) => {
+    const pos = i + 1;
+    let posContent = pos;
+    let posClass = '';
+    if(pos === 1) { posClass = 'pos-1'; }
+    else if(pos === 2) { posClass = 'pos-2'; }
+    else if(pos === 3) { posClass = 'pos-3'; }
+    else if(pos === 4) { posClass = 'pos-4'; posContent = '🏵️'; }
+    else if(pos === 5) { posClass = 'pos-5'; posContent = '🏵️'; }
+    const recent = getPlayerRecentResults(p.id, 5);
+    const formDots = recent.map(r =>
+      `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${r.win ? '#2d9653' : '#c0392b'};margin:0 1px;vertical-align:middle;"></span>`
+    ).join('');
+    tbody.innerHTML += `
+      <tr>
+        <td><span class="pos-badge ${posClass}">${posContent}</span></td>
+        <td class="player-name-cell">${p.name}</td>
+        <td>${p.played}</td>
+        <td class="wins-cell">${p.won}</td>
+        <td style="color:var(--red)">${p.lost}</td>
+        <td style="font-weight:700;color:var(--gold-light)">${p.points}</td>
+        <td style="white-space:nowrap;">${formDots || '<span style="color:var(--text-dim);font-size:12px;">—</span>'}</td>
+      </tr>`;
+  });
+}
+
+// ===================== FIXTURES =====================
+function renderFixtures() {
+  const container = document.getElementById('fixturesContainer');
+  container.innerHTML = '';
+  if(!state.schedule || state.schedule.length === 0) {
+    container.innerHTML = '<div class="card text-muted">No schedule generated yet.</div>';
+    return;
+  }
+
+  state.schedule.forEach((round, ri) => {
+    const fixtures = round.fixtures || round; // backwards compat
+    const dateLabel = round.date ? ` &nbsp;<span style="font-size:13px;font-weight:400;color:var(--text-dim);letter-spacing:0">${formatDate(round.date)}</span>` : '';
+    const roundDiv = document.createElement('div');
+    roundDiv.innerHTML = `<div class="round-header">Round ${ri + 1}${dateLabel}</div>`;
+
+    fixtures.forEach(fixture => {
+      const resultKey = `${ri}_${fixture.home}_${fixture.away}`;
+      const result = state.results[resultKey];
+      const homePlayer = getPlayerById(fixture.home);
+      const awayPlayer = getPlayerById(fixture.away);
+      if(!homePlayer || !awayPlayer) return;
+
+      const completed = result && result.winnerId;
+      const movedToCatchUp = !completed && state.catchUps && state.catchUps.find(cu => cu.fixtureKey === resultKey);
+
+      let scoreHtml = '<span class="fixture-vs">vs</span>';
+      if(completed) {
+        const homeWon = result.winnerId === fixture.home;
+        scoreHtml = `<span class="fixture-score">${homeWon ? '1' : '0'} - ${homeWon ? '0' : '1'}</span>`;
+      } else if(movedToCatchUp) {
+        scoreHtml = `<span class="fixture-vs">vs</span>`;
+      }
+
+      const homeClass = completed && result.winnerId === fixture.home ? 'winner-highlight' : '';
+      const awayClass = completed && result.winnerId === fixture.away ? 'winner-highlight' : '';
+      const movedClass = movedToCatchUp ? 'moved-to-catchup' : '';
+      const movedTag = movedToCatchUp ? '<span class="moved-label">Catch Up</span>' : '';
+
+      roundDiv.innerHTML += `
+        <div class="fixture-row ${completed ? 'completed' : ''} ${movedClass}">
+          <span class="fixture-player ${homeClass}">${homePlayer.name}</span>
+          ${scoreHtml}
+          <span class="fixture-player right ${awayClass}">${awayPlayer.name}</span>
+          ${movedTag}
+        </div>`;
+    });
+
+    container.appendChild(roundDiv);
+  });
+}
+
+// ===================== PLAYERS =====================
+function renderPlayers() {
+  const activePlayers = state.masterPlayers.filter(p => p.active);
+  const standings = getStandings();
+  const statsMap = {};
+  standings.forEach(s => statsMap[s.id] = s);
+
+  const grid = document.getElementById('playersGrid');
+  grid.innerHTML = '';
+  activePlayers.sort((a,b) => a.name.localeCompare(b.name)).forEach(p => {
+    const s = statsMap[p.id] || { played:0, won:0, lost:0 };
+    const initials = p.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+    const winPct = s.played > 0 ? Math.round((s.won / s.played) * 100) : 0;
+    grid.innerHTML += `
+      <div class="player-card" onclick="openPlayerModal(${p.id})">
+        <div class="player-avatar">${initials}</div>
+        <div class="player-card-name">${p.name}</div>
+        <div class="player-card-wins">${s.won}</div>
+        <div class="player-card-stats">${s.played} played · ${winPct}% win rate</div>
+      </div>`;
+  });
+}
+
+// ===================== PLAYER MODAL =====================
+function openPlayerModal(playerId) {
+  const player = getPlayerById(playerId);
+  if(!player) return;
+  const standings = getStandings();
+  const statsMap = {};
+  standings.forEach((s, i) => { statsMap[s.id] = { ...s, pos: i + 1 }; });
+  const s = statsMap[playerId] || { played:0, won:0, lost:0, points:0, pos: '-' };
+  const winPct = s.played > 0 ? Math.round((s.won / s.played) * 100) : 0;
+
+  // Head to head results
+  const activePlayers = state.masterPlayers.filter(p => p.active && p.id !== playerId);
+  let h2hRows = '';
+  activePlayers.sort((a,b) => a.name.localeCompare(b.name)).forEach(opp => {
+    const { wins, losses } = getH2HRecord(playerId, opp.id);
+    if(wins > 0 || losses > 0) {
+      const outcome = wins > losses ? 'W' : losses > wins ? 'L' : 'D';
+      const outcomeColor = outcome === 'W' ? 'var(--green-light)' : outcome === 'L' ? 'var(--red)' : 'var(--gold)';
+      h2hRows += `<tr>
+        <td>${opp.name}</td>
+        <td class="h2h-win">${wins}</td>
+        <td class="h2h-loss">${losses}</td>
+        <td style="font-weight:700;color:${outcomeColor}">${outcome}</td>
+      </tr>`;
+    }
+  });
+
+  document.getElementById('playerModalContent').innerHTML = `
+    <div class="modal-player-name">${player.name}</div>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="stat-value">${s.pos}</div><div class="stat-label">Position</div></div>
+      <div class="stat-box"><div class="stat-value">${s.won}</div><div class="stat-label">Wins</div></div>
+      <div class="stat-box"><div class="stat-value">${s.played}</div><div class="stat-label">Played</div></div>
+      <div class="stat-box"><div class="stat-value">${s.lost}</div><div class="stat-label">Losses</div></div>
+      <div class="stat-box"><div class="stat-value">${s.points}</div><div class="stat-label">Points</div></div>
+      <div class="stat-box"><div class="stat-value">${winPct}%</div><div class="stat-label">Win Rate</div></div>
+    </div>
+    ${h2hRows ? `
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Head to Head</div>
+      <table class="h2h-table">
+        <thead><tr><th>Opponent</th><th>W</th><th>L</th><th>Result</th></tr></thead>
+        <tbody>${h2hRows}</tbody>
+      </table>` : '<div class="text-muted">No results recorded yet.</div>'}
+  `;
+  document.getElementById('playerModal').classList.add('open');
+}
+
+function closePlayerModal() {
+  document.getElementById('playerModal').classList.remove('open');
+}
+
+// ===================== HEAD TO HEAD =====================
+function renderH2HDropdowns() {
+  const activePlayers = state.masterPlayers.filter(p => p.active).sort((a,b) => a.name.localeCompare(b.name));
+  ['h2hPlayer1','h2hPlayer2'].forEach(id => {
+    const sel = document.getElementById(id);
+    const val = sel.value;
+    sel.innerHTML = '<option value="">Select Player</option>';
+    activePlayers.forEach(p => {
+      sel.innerHTML += `<option value="${p.id}" ${p.id == val ? 'selected' : ''}>${p.name}</option>`;
+    });
+  });
+}
+
+function getH2HRecord(p1id, p2id) {
+  let wins = 0, losses = 0;
+  state.schedule.forEach((round, ri) => {
+    const fixtures = round.fixtures || round;
+    fixtures.forEach(fixture => {
+      const bothInvolved = (fixture.home == p1id && fixture.away == p2id) || (fixture.home == p2id && fixture.away == p1id);
+      if(!bothInvolved) return;
+      const key = `${ri}_${fixture.home}_${fixture.away}`;
+      const result = state.results[key];
+      if(!result || !result.winnerId) return;
+      if(result.winnerId == p1id) wins++;
+      else losses++;
+    });
+  });
+  return { wins, losses };
+}
+
+function updateH2H() {
+  const p1id = parseInt(document.getElementById('h2hPlayer1').value);
+  const p2id = parseInt(document.getElementById('h2hPlayer2').value);
+  const container = document.getElementById('h2hResult');
+  if(!p1id || !p2id || p1id === p2id) {
+    container.innerHTML = '';
+    return;
+  }
+  const p1 = getPlayerById(p1id);
+  const p2 = getPlayerById(p2id);
+  const { wins, losses } = getH2HRecord(p1id, p2id);
+
+  container.innerHTML = `
+    <div class="h2h-result-card">
+      <div class="h2h-score-display">
+        <div class="h2h-player-block">
+          <div class="h2h-player-block-name">${p1.name}</div>
+          <div class="h2h-player-block-wins" style="color:${wins > losses ? 'var(--gold-light)' : 'var(--text-dim)'}">${wins}</div>
+        </div>
+        <div class="h2h-divider">-</div>
+        <div class="h2h-player-block">
+          <div class="h2h-player-block-name">${p2.name}</div>
+          <div class="h2h-player-block-wins" style="color:${losses > wins ? 'var(--gold-light)' : 'var(--text-dim)'}">${losses}</div>
+        </div>
+      </div>
+      <div class="text-muted">${wins + losses} match${wins + losses !== 1 ? 'es' : ''} played</div>
+    </div>`;
+}
+
+// ===================== ADMIN =====================
+function adminLogin() {
+  const pwd = document.getElementById('adminPasswordInput').value;
+  if(pwd === ADMIN_PASSWORD) {
+    adminLoggedIn = true;
+    document.getElementById('adminLogin').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+    document.getElementById('loginError').style.display = 'none';
+    // Refresh all admin data after login
+    renderAdminFixtureSelects();
+    renderMasterPlayerList();
+    renderSeasonInfo();
+    renderCatchUpRoundSelect();
+    renderKillerRoundSelect();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+  }
+}
+
+function adminLogout() {
+  adminLoggedIn = false;
+  document.getElementById('adminLogin').style.display = 'block';
+  document.getElementById('adminPanel').style.display = 'none';
+  document.getElementById('adminPasswordInput').value = '';
+}
+
+function showAdminTab(tab) {
+  ['results','players','season','archive'].forEach(t => {
+    document.getElementById(`admin-${t}`).style.display = t === tab ? 'block' : 'none';
+    document.getElementById(`atab-${t}`).className = t === tab ? 'btn btn-primary' : 'btn btn-secondary';
+  });
+  if(tab === 'results') {
+    renderAdminFixtureSelects();
+    document.getElementById('allFixturesContainer').innerHTML = '';
+    document.getElementById('resultRound').value = '';
+    // Pre-select first available round
+    setTimeout(() => {
+      const sel = document.getElementById('resultRound');
+      if(sel && sel.options.length > 1) {
+        sel.selectedIndex = 1;
+        populateAllFixtures();
+      }
+    }, 100);
+  }
+}
+
+// ===================== RESULT ENTRY =====================
+function renderAdminFixtureSelects() {
+  if(!state.schedule) return;
+
+  // Result entry round dropdown — only show rounds with unplayed fixtures
+  const resultSel = document.getElementById('resultRound');
+  if(resultSel) {
+    const currentVal = resultSel.value;
+    resultSel.innerHTML = '<option value="">Select Round</option>';
+    state.schedule.forEach((round, ri) => {
+      const fixtures = round.fixtures || round;
+      if(!state.results) state.results = {};
+      const unplayed = fixtures.filter(f => !state.results[`${ri}_${f.home}_${f.away}`]).length;
+      if(unplayed === 0) return; // hide completed rounds
+      const dateLabel = round.date ? ` — ${formatDate(round.date)}` : '';
+      resultSel.innerHTML += `<option value="${ri}" ${ri == currentVal ? 'selected' : ''}>Round ${ri + 1}${dateLabel} (${unplayed} outstanding)</option>`;
+    });
+  }
+
+  // Delete result round dropdown — show all rounds that have results
+  const deleteSel = document.getElementById('deleteRound');
+  if(deleteSel) {
+    deleteSel.innerHTML = '<option value="">Select Round</option>';
+    state.schedule.forEach((round, ri) => {
+      const fixtures = round.fixtures || round;
+      if(!state.results) state.results = {};
+      const played = fixtures.filter(f => !!state.results[`${ri}_${f.home}_${f.away}`]).length;
+      if(played === 0) return; // hide rounds with no results to delete
+      const dateLabel = round.date ? ` — ${formatDate(round.date)}` : '';
+      deleteSel.innerHTML += `<option value="${ri}">Round ${ri + 1}${dateLabel} (${played} results)</option>`;
+    });
+  }
+}
+
+function populateFixtureSelect() {} // kept for compatibility
+
+function populateAllFixtures() {
+  const roundSel = document.getElementById('resultRound');
+  if(!roundSel) return;
+  const ri = parseInt(roundSel.value);
+  const container = document.getElementById('allFixturesContainer');
+  container.innerHTML = '';
+  if(isNaN(ri)) return;
+  if(!state.schedule || !state.schedule[ri]) {
+    container.innerHTML = '<div class="text-muted" style="margin-top:12px;">No fixtures found for this round. Try refreshing the page.</div>';
+    return;
+  }
+
+  const round = state.schedule[ri];
+  const fixtures = round.fixtures || round;
+  if(!state.results) state.results = {};
+
+  const unplayed = fixtures.filter(f => !state.results[`${ri}_${f.home}_${f.away}`]);
+  const played = fixtures.filter(f => !!state.results[`${ri}_${f.home}_${f.away}`]);
+
+  if(unplayed.length === 0 && played.length === 0) {
+    container.innerHTML = '<div class="text-muted" style="margin-top:12px;">No fixtures found for this round.</div>';
+    return;
+  }
+
+  let html = '';
+
+  if(unplayed.length > 0) {
+    html += `<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin:16px 0 10px;">Unplayed — ${unplayed.length} fixtures</div>`;
+    unplayed.forEach(f => {
+      const home = getPlayerById(f.home);
+      const away = getPlayerById(f.away);
+      const key = `${ri}_${f.home}_${f.away}`;
+      html += `
+        <div class="bulk-fixture-row" id="bfrow_${key}">
+          <div class="bulk-fixture-names">${home.name} <span style="color:var(--text-dim);font-weight:400">vs</span> ${away.name}</div>
+          <select class="bulk-winner-select" id="bwinner_${key}">
+            <option value="">— Pick winner —</option>
+            <option value="${f.home}">${home.name}</option>
+            <option value="${f.away}">${away.name}</option>
+          </select>
+          <button class="btn btn-gold" style="padding:7px 14px;font-size:13px;" onclick="saveSingleResult('${key}', ${ri})">Save</button>
+          <span class="bulk-saved-label" id="bsaved_${key}" style="display:none;">✅ Saved!</span>
+        </div>`;
+    });
+
+    html += `
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.08);">
+        <button class="btn btn-gold" style="width:100%;justify-content:center;font-size:16px;padding:12px;" onclick="saveAllResults(${ri})">💾 Save All Results</button>
+      </div>`;
+  }
+
+  if(played.length > 0) {
+    html += `<div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin:16px 0 10px;">Already Completed — ${played.length} fixtures</div>`;
+    played.forEach(f => {
+      const home = getPlayerById(f.home);
+      const away = getPlayerById(f.away);
+      const key = `${ri}_${f.home}_${f.away}`;
+      const result = state.results[key];
+      const winner = getPlayerById(result.winnerId);
+      const loser = result.winnerId === f.home ? away : home;
+      html += `
+        <div class="bulk-fixture-row saved" id="bfrow_${key}">
+          <div class="bulk-fixture-names">${home.name} <span style="color:var(--text-dim);font-weight:400">vs</span> ${away.name}</div>
+          <span class="bulk-saved-label" id="bsaved_${key}">✅ ${winner.name} won</span>
+          <select class="bulk-winner-select" id="bedit_${key}" style="display:none;">
+            <option value="">— Pick new winner —</option>
+            <option value="${f.home}">${home.name}</option>
+            <option value="${f.away}">${away.name}</option>
+          </select>
+          <button class="btn btn-secondary" style="padding:4px 10px;font-size:11px;" id="beditbtn_${key}" onclick="toggleEditFixture('${key}', ${f.home}, ${f.away}, ${ri})">Edit</button>
+        </div>`;
+    });
+  }
+
+  container.innerHTML = html;
+}
+
+function toggleEditFixture(key, homeId, awayId, ri) {
+  const savedLabel = document.getElementById(`bsaved_${key}`);
+  const editSelect = document.getElementById(`bedit_${key}`);
+  const editBtn = document.getElementById(`beditbtn_${key}`);
+  const row = document.getElementById(`bfrow_${key}`);
+
+  if(editSelect.style.display === 'none') {
+    // Switch to edit mode
+    savedLabel.style.display = 'none';
+    editSelect.style.display = 'inline-block';
+    editBtn.textContent = 'Save';
+    editBtn.className = 'btn btn-gold';
+    editBtn.onclick = () => saveEditedResult(key, homeId, awayId, ri);
+    row.classList.remove('saved');
+  } else {
+    // Cancel edit
+    savedLabel.style.display = 'inline';
+    editSelect.style.display = 'none';
+    editBtn.textContent = 'Edit';
+    editBtn.className = 'btn btn-secondary';
+    editBtn.onclick = () => toggleEditFixture(key, homeId, awayId, ri);
+    row.classList.add('saved');
+  }
+}
+
+async function saveEditedResult(key, homeId, awayId, ri) {
+  const alertDiv = document.getElementById('saveAllAlert');
+  const editSelect = document.getElementById(`bedit_${key}`);
+  const winnerId = parseInt(editSelect.value);
+
+  if(!winnerId) {
+    alertDiv.innerHTML = '<div class="alert alert-error">Please pick a new winner.</div>';
+    setTimeout(() => alertDiv.innerHTML = '', 3000);
+    return;
+  }
+
+  state.results[key] = { homeId, awayId, winnerId };
+  await saveState();
+  renderStandings();
+  renderFixtures();
+  updateCatchUpBadge();
+
+  const winner = getPlayerById(winnerId);
+  alertDiv.innerHTML = `<div class="alert alert-success">✅ Result updated — ${winner.name} wins.</div>`;
+  setTimeout(() => { alertDiv.innerHTML = ''; populateAllFixtures(); }, 3000);
+}
+
+async function saveSingleResult(key, ri) {
+  const winnerSel = document.getElementById(`bwinner_${key}`);
+  const alertDiv = document.getElementById('resultAlert');
+  const winnerId = parseInt(winnerSel.value);
+
+  if(!winnerId) {
+    alertDiv.innerHTML = '<div class="alert alert-error">Please pick a winner first.</div>';
+    setTimeout(() => alertDiv.innerHTML = '', 3000);
+    return;
+  }
+
+  const parts = key.split('_');
+  const homeId = parseInt(parts[1]);
+  const awayId = parseInt(parts[2]);
+
+  if(!state.results) state.results = {};
+  state.results[key] = { homeId, awayId, winnerId };
+
+  // Update the row visually immediately
+  const row = document.getElementById(`bfrow_${key}`);
+  const savedLabel = document.getElementById(`bsaved_${key}`);
+  const winner = getPlayerById(winnerId);
+  if(row) row.classList.add('saved');
+  if(savedLabel) { savedLabel.textContent = `✅ ${winner.name} won`; savedLabel.style.display = 'inline'; }
+  if(winnerSel) winnerSel.style.display = 'none';
+  row.querySelector('button').style.display = 'none';
+
+  await saveState();
+  renderStandings();
+  renderFixtures();
+  updateCatchUpBadge();
+}
+
+async function saveAllResults(ri) {
+  const alertDiv = document.getElementById('saveAllAlert');
+  const round = state.schedule[ri];
+  const fixtures = round.fixtures || round;
+  if(!state.results) state.results = {};
+  if(!state.catchUps) state.catchUps = [];
+
+  const unplayed = fixtures.filter(f => !state.results[`${ri}_${f.home}_${f.away}`]);
+
+  if(unplayed.length === 0) {
+    alertDiv.innerHTML = '<div class="alert alert-info">All fixtures in this round already have results.</div>';
+    setTimeout(() => alertDiv.innerHTML = '', 3000);
+    return;
+  }
+
+  alertDiv.innerHTML = '<div class="alert alert-info">⏳ Saving results...</div>';
+
+  let saved = 0;
+  let movedToCatchUp = 0;
+
+  unplayed.forEach(f => {
+    const key = `${ri}_${f.home}_${f.away}`;
+    const sel = document.getElementById(`bwinner_${key}`);
+    const winnerId = sel ? parseInt(sel.value) : 0;
+
+    if(winnerId) {
+      state.results[key] = { homeId: f.home, awayId: f.away, winnerId };
+      saved++;
+    } else {
+      const alreadyMoved = state.catchUps.find(cu => cu.fixtureKey === key);
+      if(!alreadyMoved) {
+        state.catchUps.push({
+          roundIndex: ri,
+          fixtureKey: key,
+          home: f.home,
+          away: f.away,
+          originalDate: round.date || null,
+          addedDate: new Date().toISOString().split('T')[0]
+        });
+        movedToCatchUp++;
+      }
+    }
+  });
+
+  await saveState();
+
+  // Build confirmation message
+  let msg = '';
+  if(saved > 0) msg += `✅ ${saved} result${saved !== 1 ? 's' : ''} saved. `;
+  if(movedToCatchUp > 0) msg += `📋 ${movedToCatchUp} fixture${movedToCatchUp !== 1 ? 's' : ''} moved to Catch Ups.`;
+  if(saved === 0 && movedToCatchUp === 0) msg = '⚠️ No changes made.';
+
+  alertDiv.innerHTML = `<div class="alert alert-success">${msg}</div>`;
+
+  // Update other sections
+  renderStandings();
+  renderFixtures();
+  renderCatchUps();
+  renderCatchUpRoundSelect();
+  updateCatchUpBadge();
+  renderSeasonInfo();
+
+  // Refresh fixture list but keep the alert visible
+  populateAllFixtures();
+
+  setTimeout(() => alertDiv.innerHTML = '', 5000);
+}
+
+async function submitResult() {} // kept for compatibility
+
+// ===================== DELETE RESULT =====================
+function populateDeleteFixtureSelect() {
+  const ri = parseInt(document.getElementById('deleteRound').value);
+  const fixSel = document.getElementById('deleteFixture');
+  fixSel.innerHTML = '<option value="">Select Fixture</option>';
+  if(isNaN(ri)) return;
+
+  const round = state.schedule[ri];
+  const fixtures = round.fixtures || round;
+  fixtures.forEach(fixture => {
+    const key = `${ri}_${fixture.home}_${fixture.away}`;
+    if(!state.results[key]) return;
+    const home = getPlayerById(fixture.home);
+    const away = getPlayerById(fixture.away);
+    const winner = getPlayerById(state.results[key].winnerId);
+    fixSel.innerHTML += `<option value="${key}">${home.name} vs ${away.name} (W: ${winner.name})</option>`;
+  });
+}
+
+function deleteResult() {
+  const key = document.getElementById('deleteFixture').value;
+  const alertDiv = document.getElementById('seasonAlert');
+  if(!key) {
+    alertDiv.innerHTML = '<div class="alert alert-error">Please select a result to delete.</div>';
+    return;
+  }
+  delete state.results[key];
+  saveState();
+  renderAll();
+  populateDeleteFixtureSelect();
+  alertDiv.innerHTML = '<div class="alert alert-success">Result deleted.</div>';
+  setTimeout(() => alertDiv.innerHTML = '', 3000);
+}
+
+// ===================== PLAYER MANAGEMENT =====================
+function renderMasterPlayerList() {
+  const masterList = document.getElementById('masterPlayerList');
+  const activeList = document.getElementById('activePlayerList');
+  if(!masterList || !activeList) return;
+
+  const active = state.masterPlayers.filter(p => p.active);
+  document.getElementById('masterCount').textContent = `(${state.masterPlayers.length}/150)`;
+  document.getElementById('activeCount').textContent = `(${active.length}/24)`;
+
+  const sorted = [...state.masterPlayers].sort((a,b) => a.name.localeCompare(b.name));
+
+  masterList.innerHTML = '';
+  sorted.forEach(p => {
+    masterList.innerHTML += `
+      <div class="player-list-item">
+        <span class="player-list-name">${p.name}</span>
+        <span class="badge-${p.active ? 'active' : 'inactive'}">${p.active ? 'Active' : 'Inactive'}</span>
+        <button class="btn btn-secondary" style="padding:4px 10px;font-size:11px;" onclick="deletePlayer(${p.id})">Remove</button>
+      </div>`;
+  });
+
+  activeList.innerHTML = '';
+  sorted.forEach(p => {
+    const canActivate = active.length < 24 || p.active;
+    activeList.innerHTML += `
+      <div class="player-list-item">
+        <span class="player-list-name">${p.name}</span>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;color:var(--text-dim);">
+          <input type="checkbox" ${p.active ? 'checked' : ''} ${!canActivate ? 'disabled' : ''} onchange="togglePlayerActive(${p.id}, this.checked)" style="accent-color:var(--green-light);">
+          Active
+        </label>
+      </div>`;
+  });
+}
+
+function addPlayer() {
+  const input = document.getElementById('newPlayerName');
+  const name = input.value.trim();
+  const alertDiv = document.getElementById('playerAlert');
+
+  if(!name) return;
+  if(state.masterPlayers.length >= 150) {
+    alertDiv.innerHTML = '<div class="alert alert-error">Master list is full (150 players max).</div>';
+    return;
+  }
+  if(state.masterPlayers.find(p => p.name.toLowerCase() === name.toLowerCase())) {
+    alertDiv.innerHTML = '<div class="alert alert-error">Player already exists.</div>';
+    return;
+  }
+
+  state.masterPlayers.push({ id: state.nextPlayerId++, name, active: false });
+  input.value = '';
+  saveState();
+  renderMasterPlayerList();
+  alertDiv.innerHTML = `<div class="alert alert-success">${name} added to master list.</div>`;
+  setTimeout(() => alertDiv.innerHTML = '', 3000);
+}
+
+function deletePlayer(id) {
+  const player = getPlayerById(id);
+  if(!player) return;
+  if(confirm(`Remove ${player.name} from the master list? This cannot be undone.`)) {
+    state.masterPlayers = state.masterPlayers.filter(p => p.id !== id);
+    saveState();
+    renderMasterPlayerList();
+    renderAll();
+  }
+}
+
+function togglePlayerActive(id, active) {
+  const activePlayers = state.masterPlayers.filter(p => p.active);
+  if(active && activePlayers.length >= 20) {
+    renderMasterPlayerList();
+    document.getElementById('playerAlert').innerHTML = '<div class="alert alert-error">Maximum 24 active players per season.</div>';
+    setTimeout(() => document.getElementById('playerAlert').innerHTML = '', 3000);
+    return;
+  }
+  const player = state.masterPlayers.find(p => p.id === id);
+  if(player) player.active = active;
+  saveState();
+  renderMasterPlayerList();
+}
+
+async function forceResetLeague() {
+  // Show immediate feedback
+  document.getElementById('seasonAlert').innerHTML = '<div class="alert alert-info">⏳ Resetting league...</div>';
+
+  // Stop polling so it doesn't overwrite our reset
+  if(window.pollInterval) clearInterval(window.pollInterval);
+
+  const masterPlayers = state.masterPlayers.map(p => ({ ...p, active: false }));
+  const seasonArchives = state.seasonArchives || [];
+  const nextPlayerId = state.nextPlayerId;
+
+  const cleanState = {
+    season: 1,
+    masterPlayers,
+    nextPlayerId,
+    schedule: [],
+    results: {},
+    seasonStarted: false,
+    seasonStartDate: null,
+    catchUps: [],
+    killerGames: [],
+    flukes: [],
+    seasonArchives
+  };
+
+  // DELETE from Firebase first
+  try {
+    await fetch(FIREBASE_URL, { method: 'DELETE' });
+    await new Promise(resolve => setTimeout(resolve, 1500));
+  } catch(e) {}
+
+  // PUT clean state
+  try {
+    await fetch(FIREBASE_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(cleanState)
+    });
+  } catch(e) {}
+
+  // Update local state and storage
+  state = cleanState;
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+
+  renderAll();
+  // Show full screen success overlay
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(13,31,21,0.97);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;';
+  overlay.innerHTML = `
+    <div style="font-size:80px;">✅</div>
+    <div style="font-family:\'Bebas Neue\',sans-serif;font-size:36px;color:#f0c040;letter-spacing:3px;">League Reset!</div>
+    <div style="color:#8aab96;font-size:16px;">Reloading in 4 seconds...</div>
+  `;
+  document.body.appendChild(overlay);
+
+  // Reload the page after 4 seconds to ensure clean state
+  setTimeout(() => {
+    window.location.reload();
+  }, 4000);
+}
+
+function confirmResetLeague() {
+  showConfirm(
+    'Reset League?',
+    'This will clear ALL results, schedule, killer games, flukes and catch ups. Your player bank will be kept but all players will be set to inactive. This cannot be undone!',
+    forceResetLeague
+  );
+}
+
+async function forcePushToCloud() {
+  const alertDiv = document.getElementById('seasonAlert');
+  alertDiv.innerHTML = '<div class="alert alert-info">Pushing data to cloud...</div>';
+  try {
+    const response = await fetch(FIREBASE_URL, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(state)
+    });
+    if(response.ok) {
+      alertDiv.innerHTML = '<div class="alert alert-success">Data pushed successfully! Other devices will update within 15 seconds.</div>';
+      updateSyncStatus('live');
+    } else {
+      alertDiv.innerHTML = '<div class="alert alert-error">Push failed. Please check your connection and try again.</div>';
+    }
+  } catch(e) {
+    alertDiv.innerHTML = '<div class="alert alert-error">Push failed. Please check your connection and try again.</div>';
+  }
+}
+
+// ===================== SEASON MANAGEMENT =====================
+function renderSeasonInfo() {
+  const info = document.getElementById('seasonInfo');
+  if(!info) return;
+  const activePlayers = state.masterPlayers.filter(p => p.active);
+  const totalMatches = state.schedule ? state.schedule.reduce((s, r) => s + (r.fixtures || r).length, 0) : 0;
+  const played = Object.keys(state.results || {}).length;
+
+  let dateRange = '';
+  if(state.seasonStartDate) {
+    const lastRound = state.schedule[state.schedule.length - 1];
+    const endDate = lastRound && lastRound.date ? ` → ${formatDate(lastRound.date)}` : '';
+    dateRange = ` · ${formatDate(state.seasonStartDate)}${endDate}`;
+  }
+
+  info.innerHTML = `
+    <div class="alert alert-info">
+      <strong>Season ${state.season}</strong> · ${activePlayers.length} active players · ${played} of ${totalMatches} matches played${dateRange}
+    </div>`;
+}
+
+async function confirmNewSeason() {
+  const dateInput = document.getElementById('seasonStartDate').value;
+  const alertDiv = document.getElementById('seasonAlert');
+  const legsCount = parseInt(document.getElementById('seasonLegs').value) || 1;
+
+  if(!dateInput) {
+    alertDiv.innerHTML = '<div class="alert alert-error">Please enter a start date.</div>';
+    return;
+  }
+
+  const activePlayers = state.masterPlayers.filter(p => p.active);
+  if(activePlayers.length < 12 || activePlayers.length > 24) {
+    alertDiv.innerHTML = '<div class="alert alert-error">You need between 12 and 24 active players to start a new season.</div>';
+    return;
+  }
+
+  if(!confirm(`Start new season with ${activePlayers.length} players from ${formatDate(dateInput)}? This will clear all current results.`)) return;
+
+  alertDiv.innerHTML = '<div class="alert alert-info">⏳ Generating schedule...</div>';
+
+  const result = generateSchedule(dateInput, legsCount);
+  if(!result) {
+    alertDiv.innerHTML = '<div class="alert alert-error">❌ Failed to generate schedule.</div>';
+    return;
+  }
+
+  alertDiv.innerHTML = `<div class="alert alert-info">⏳ Saving ${state.schedule.length} rounds to cloud...</div>`;
+  await saveState();
+  renderAll();
+  document.getElementById('seasonStartDate').value = '';
+  alertDiv.innerHTML = `<div class="alert alert-success">✅ Season started! ${state.schedule.length} rounds generated for ${activePlayers.length} players.</div>`;
+  setTimeout(() => alertDiv.innerHTML = '', 8000);
+}
+
+// ===================== FLUKES =====================
+const FLUKE_TYPES = {
+  outrageous: { label: 'Outrageous Fluke', emoji: '🤯', points: 3 },
+  lucky:      { label: 'Lucky Fluke',      emoji: '😏', points: 2 },
+  simple:     { label: 'Simple Fluke',     emoji: '🎱', points: 1 }
+};
+
+let flukesLoggedIn = false;
+
+function flukesLogin() {
+  const pwd = document.getElementById('flukesPasswordInput').value;
+  if(pwd === ADMIN_PASSWORD) {
+    flukesLoggedIn = true;
+    document.getElementById('flukesLoginGate').style.display = 'none';
+    document.getElementById('flukesContent').style.display = 'block';
+    renderFlukePlayerDropdown();
+    renderFlukeLeaderboard();
+    renderFlukeHistory();
+  } else {
+    document.getElementById('flukesLoginError').style.display = 'block';
+  }
+}
+
+function flukesLogout() {
+  flukesLoggedIn = false;
+  document.getElementById('flukesLoginGate').style.display = 'block';
+  document.getElementById('flukesContent').style.display = 'none';
+  document.getElementById('flukesPasswordInput').value = '';
+  document.getElementById('flukesLoginError').style.display = 'none';
+}
+
+function renderFlukes() {
+  renderFlukeLeaderboard();
+  renderFlukeHistory();
+  if(flukesLoggedIn) {
+    document.getElementById('flukesLoginGate').style.display = 'none';
+    document.getElementById('flukesContent').style.display = 'block';
+    renderFlukePlayerDropdown();
+  } else {
+    document.getElementById('flukesLoginGate').style.display = 'block';
+    document.getElementById('flukesContent').style.display = 'none';
+  }
+}
+
+function renderFlukePlayerDropdown() {
+  const sel = document.getElementById('flukePlayer');
+  if(!sel) return;
+  const activePlayers = state.masterPlayers.filter(p => p.active).sort((a,b) => a.name.localeCompare(b.name));
+  const val = sel.value;
+  sel.innerHTML = '<option value="">Select Player</option>';
+  activePlayers.forEach(p => {
+    sel.innerHTML += `<option value="${p.id}" ${p.id == val ? 'selected' : ''}>${p.name}</option>`;
+  });
+}
+
+function getFlukeStatsForPlayer(playerId) {
+  if(!state.flukes) return { outrageous: 0, lucky: 0, simple: 0, points: 0 };
+  const stats = { outrageous: 0, lucky: 0, simple: 0, points: 0 };
+  state.flukes.filter(f => f.playerId === playerId).forEach(f => {
+    const type = f.flukeType || 'simple';
+    stats[type] = (stats[type] || 0) + 1;
+    stats.points += FLUKE_TYPES[type] ? FLUKE_TYPES[type].points : 1;
+  });
+  return stats;
+}
+
+// Keep for backwards compatibility with awards
+function getFlukeCountForPlayer(playerId) {
+  if(!state.flukes) return 0;
+  return state.flukes.filter(f => f.playerId === playerId).length;
+}
+
+function renderFlukeLeaderboard() {
+  const tbody = document.getElementById('flukesLeaderboardBody');
+  if(!tbody) return;
+  const activePlayers = state.masterPlayers.filter(p => p.active);
+
+  const ranked = activePlayers
+    .map(p => ({ player: p, stats: getFlukeStatsForPlayer(p.id) }))
+    .sort((a,b) => b.stats.points - a.stats.points || a.player.name.localeCompare(b.player.name));
+
+  tbody.innerHTML = '';
+  ranked.forEach((r, i) => {
+    const pos = i + 1;
+    const posClass = pos <= 3 ? `pos-${pos}` : '';
+    const posContent = pos <= 3 ? pos : pos;
+    tbody.innerHTML += `
+      <tr>
+        <td><span class="pos-badge ${posClass}">${posContent}</span></td>
+        <td style="font-weight:600;">${r.player.name}</td>
+        <td style="color:#ff6b6b;font-weight:700;">${r.stats.outrageous}</td>
+        <td style="color:var(--gold-light);font-weight:700;">${r.stats.lucky}</td>
+        <td style="color:var(--green-light);font-weight:700;">${r.stats.simple}</td>
+        <td style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold-light);">${r.stats.points}</td>
+      </tr>`;
+  });
+}
+
+async function addFluke() {
+  const alertDiv = document.getElementById('flukeAlert');
+  const playerId = parseInt(document.getElementById('flukePlayer').value);
+  const flukeType = document.getElementById('flukeType').value;
+  const note = document.getElementById('flukeNote').value.trim();
+
+  if(!playerId) {
+    alertDiv.innerHTML = '<div class="alert alert-error">Please select a player.</div>';
+    setTimeout(() => alertDiv.innerHTML = '', 3000);
+    return;
+  }
+
+  alertDiv.innerHTML = '<div class="alert alert-info">⏳ Saving...</div>';
+
+  if(!state.flukes) state.flukes = [];
+  state.flukes.push({
+    id: Date.now(),
+    playerId,
+    flukeType,
+    count: 1,
+    note: note || null,
+    date: new Date().toISOString().split('T')[0]
+  });
+
+  await saveState();
+  renderFlukeLeaderboard();
+  renderFlukeHistory();
+
+  const player = getPlayerById(playerId);
+  const ft = FLUKE_TYPES[flukeType];
+  document.getElementById('flukePlayer').value = '';
+  document.getElementById('flukeType').value = 'outrageous';
+  document.getElementById('flukeNote').value = '';
+
+  alertDiv.innerHTML = `<div class="alert alert-success">${ft.emoji} ${ft.label} recorded for ${player.name}! (+${ft.points} pts)</div>`;
+  setTimeout(() => alertDiv.innerHTML = '', 4000);
+}
+
+function renderFlukeHistory() {
+  const container = document.getElementById('flukeHistoryContainer');
+  if(!container) return;
+  if(!state.flukes || state.flukes.length === 0) {
+    container.innerHTML = '<div class="text-muted">No flukes recorded yet. Keep playing... 😏</div>';
+    return;
+  }
+
+  const sorted = [...state.flukes].sort((a,b) => b.id - a.id);
+  let html = '';
+  sorted.forEach(f => {
+    const player = getPlayerById(f.playerId);
+    if(!player) return;
+    const ft = FLUKE_TYPES[f.flukeType || 'simple'];
+    html += `
+      <div class="fluke-history-row">
+        <div class="fluke-ball">${ft.emoji}</div>
+        <div class="fluke-player-name">${player.name}</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--gold);white-space:nowrap;">${ft.label}</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold-light);">+${ft.points}pts</div>
+        <div class="fluke-date">${formatDate(f.date)}</div>
+        <button class="btn btn-secondary" style="padding:4px 10px;font-size:11px;" onclick="deleteFluke(${f.id})">Delete</button>
+        ${f.note ? `<div class="fluke-note">"${f.note}"</div>` : ''}
+      </div>`;
+  });
+  container.innerHTML = html;
+}
+
+async function deleteFluke(id) {
+  if(!confirm('Delete this fluke entry?')) return;
+  state.flukes = state.flukes.filter(f => f.id !== id);
+  await saveState();
+  renderFlukeLeaderboard();
+  renderFlukeHistory();
+}
+
+// ===================== KILLER =====================
+const KILLER_FEE = 5.00;
+
+function renderKiller() {
+  renderKillerRoundSelect();
+  renderKillerPlayerCheckboxes();
+  renderKillerTotals();
+  renderKillerHistory();
+}
+
+function renderKillerRoundSelect() {
+  const sel = document.getElementById('killerRound');
+  if(!sel || !state.schedule) return;
+  const currentVal = sel.value;
+  sel.innerHTML = '<option value="">Select Round</option>';
+  state.schedule.forEach((round, ri) => {
+    const dateLabel = round.date ? ` — ${formatDate(round.date)}` : '';
+    sel.innerHTML += `<option value="${ri}" ${ri == currentVal ? 'selected' : ''}>Round ${ri + 1}${dateLabel}</option>`;
+  });
+}
+
+function renderKillerPlayerCheckboxes() {
+  const container = document.getElementById('killerPlayerCheckboxes');
+  if(!container) return;
+  // All players — both active and inactive
+  const allPlayers = [...state.masterPlayers].sort((a,b) => a.name.localeCompare(b.name));
+  container.innerHTML = '';
+  allPlayers.forEach(p => {
+    container.innerHTML += `
+      <div class="player-list-item">
+        <span class="player-list-name">${p.name} ${p.active ? '' : '<span class="badge-inactive">Inactive</span>'}</span>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;color:var(--text-dim);">
+          <input type="checkbox" value="${p.id}" class="killer-entry-checkbox" onchange="updateKillerPot()" style="accent-color:var(--green-light);">
+          Enter
+        </label>
+      </div>`;
+  });
+}
+
+function updateKillerPot() {
+  const checked = document.querySelectorAll('.killer-entry-checkbox:checked');
+  const count = checked.length;
+  const pot = count * KILLER_FEE;
+  document.getElementById('killerEntryCount').textContent = `(${count} selected · Pot: £${pot.toFixed(2)})`;
+
+  // Update winner dropdown to only show entered players
+  const winSel = document.getElementById('killerWinner');
+  const currentWinner = winSel.value;
+  winSel.innerHTML = '<option value="">Select Winner</option>';
+  checked.forEach(cb => {
+    const player = getPlayerById(parseInt(cb.value));
+    if(player) winSel.innerHTML += `<option value="${player.id}" ${player.id == currentWinner ? 'selected' : ''}>${player.name}</option>`;
+  });
+}
+
+async function saveKillerGame() {
+  const alertDiv = document.getElementById('killerGameAlert');
+  const roundIndex = document.getElementById('killerRound').value;
+  const checked = document.querySelectorAll('.killer-entry-checkbox:checked');
+  const winnerId = parseInt(document.getElementById('killerWinner').value);
+
+  if(!roundIndex) {
+    alertDiv.innerHTML = '<div class="alert alert-error">Please select a round.</div>';
+    setTimeout(() => alertDiv.innerHTML = '', 3000);
+    return;
+  }
+  if(checked.length < 2) {
+    alertDiv.innerHTML = '<div class="alert alert-error">Please select at least 2 players.</div>';
+    setTimeout(() => alertDiv.innerHTML = '', 3000);
+    return;
+  }
+  if(!winnerId) {
+    alertDiv.innerHTML = '<div class="alert alert-error">Please select a winner.</div>';
+    setTimeout(() => alertDiv.innerHTML = '', 3000);
+    return;
+  }
+
+  alertDiv.innerHTML = '<div class="alert alert-info">⏳ Saving...</div>';
+
+  const playerIds = Array.from(checked).map(cb => parseInt(cb.value));
+  const pot = playerIds.length * KILLER_FEE;
+  const round = state.schedule[parseInt(roundIndex)];
+  const date = round && round.date ? round.date : new Date().toISOString().split('T')[0];
+
+  if(!state.killerGames) state.killerGames = [];
+  state.killerGames.push({
+    id: Date.now(),
+    roundIndex: parseInt(roundIndex),
+    playerIds,
+    winnerId,
+    pot,
+    date
+  });
+
+  await saveState();
+  renderKillerTotals();
+  renderKillerHistory();
+
+  // Reset form
+  document.querySelectorAll('.killer-entry-checkbox').forEach(cb => cb.checked = false);
+  document.getElementById('killerRound').value = '';
+  document.getElementById('killerWinner').innerHTML = '<option value="">Select Winner</option>';
+  updateKillerPot();
+
+  const winner = getPlayerById(winnerId);
+  alertDiv.innerHTML = `<div class="alert alert-success">✅ Killer game saved! ${winner.name} wins £${pot.toFixed(2)}!</div>`;
+  setTimeout(() => alertDiv.innerHTML = '', 4000);
+}
+
+function renderKillerTotals() {
+  const tbody = document.getElementById('killerTotalsBody');
+  if(!tbody) return;
+  if(!state.killerGames || state.killerGames.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="4" style="color:var(--text-dim);text-align:center;padding:16px;">No games recorded yet.</td></tr>';
+    return;
+  }
+
+  // Build totals for every player who has participated
+  const totals = {};
+  state.killerGames.forEach(game => {
+    game.playerIds.forEach(pid => {
+      if(!totals[pid]) totals[pid] = { paid: 0, won: 0 };
+      totals[pid].paid += KILLER_FEE;
+    });
+    if(!totals[game.winnerId]) totals[game.winnerId] = { paid: 0, won: 0 };
+    totals[game.winnerId].won += game.pot;
+  });
+
+  // Sort by net winnings descending
+  const rows = Object.entries(totals)
+    .map(([id, t]) => ({ player: getPlayerById(parseInt(id)), paid: t.paid, won: t.won, net: t.won - t.paid }))
+    .filter(r => r.player)
+    .sort((a,b) => b.net - a.net);
+
+  tbody.innerHTML = '';
+  rows.forEach(r => {
+    const netClass = r.net > 0 ? 'net-positive' : r.net < 0 ? 'net-negative' : 'net-zero';
+    const netSign = r.net > 0 ? '+' : '';
+    tbody.innerHTML += `
+      <tr>
+        <td style="font-weight:600;">${r.player.name}</td>
+        <td style="color:var(--red);">£${r.paid.toFixed(2)}</td>
+        <td style="color:var(--green-light);">£${r.won.toFixed(2)}</td>
+        <td class="${netClass}">${netSign}£${r.net.toFixed(2)}</td>
+      </tr>`;
+  });
+}
+
+function renderKillerHistory() {
+  const container = document.getElementById('killerHistoryContainer');
+  if(!container) return;
+  if(!state.killerGames || state.killerGames.length === 0) {
+    container.innerHTML = '<div class="text-muted">No games recorded yet.</div>';
+    return;
+  }
+
+  const sorted = [...state.killerGames].sort((a,b) => b.id - a.id); // most recent first
+  let html = '';
+  sorted.forEach((game, idx) => {
+    const winner = getPlayerById(game.winnerId);
+    const players = game.playerIds.map(id => getPlayerById(id)).filter(Boolean);
+    const roundLabel = state.schedule && state.schedule[game.roundIndex]
+      ? `Round ${game.roundIndex + 1}${state.schedule[game.roundIndex].date ? ' · ' + formatDate(state.schedule[game.roundIndex].date) : ''}`
+      : `Round ${game.roundIndex + 1}`;
+    html += `
+      <div class="killer-history-row">
+        <div class="killer-history-round">${roundLabel}</div>
+        <div class="killer-history-winner">🏆 ${winner ? winner.name : 'Unknown'}</div>
+        <div class="killer-history-pot">£${game.pot.toFixed(2)}</div>
+        <button class="btn btn-secondary" style="padding:4px 10px;font-size:11px;" onclick="deleteKillerGame(${game.id})">Delete</button>
+        <div class="killer-history-players">${players.map(p => p.name).join(', ')}</div>
+      </div>`;
+  });
+  container.innerHTML = html;
+}
+
+async function deleteKillerGame(gameId) {
+  if(!confirm('Delete this Killer game? This cannot be undone.')) return;
+  state.killerGames = state.killerGames.filter(g => g.id !== gameId);
+  await saveState();
+  renderKillerTotals();
+  renderKillerHistory();
+}
+
+// ===================== ODDS =====================
+
+// Convert probability (0-1) to fractional odds string
+function probToFractional(prob) {
+  if(prob <= 0) return 'N/A';
+  if(prob >= 1) return '1/100';
+  const decimal = 1 / prob;
+  // Find a clean fractional representation
+  const numerator = decimal - 1;
+  // Common fractions lookup for clean display
+  const fractions = [
+    [1,10],[1,8],[1,6],[1,5],[1,4],[1,3],[2,5],[1,2],[3,5],[2,3],
+    [3,4],[4,5],[5,6],[1,1],[6,5],[5,4],[4,3],[3,2],[7,4],[2,1],
+    [9,4],[5,2],[11,4],[3,1],[7,2],[4,1],[9,2],[5,1],[6,1],[7,1],
+    [8,1],[9,1],[10,1],[12,1],[14,1],[16,1],[20,1],[25,1],[33,1],[50,1]
+  ];
+  // Find nearest fraction
+  let best = fractions[0];
+  let bestDiff = Math.abs(numerator - fractions[0][0] / fractions[0][1]);
+  fractions.forEach(([n, d]) => {
+    const diff = Math.abs(numerator - n / d);
+    if(diff < bestDiff) { bestDiff = diff; best = [n, d]; }
+  });
+  return `${best[0]}/${best[1]}`;
+}
+
+// Get a player's win rate in the current season
+function getWinRate(playerId) {
+  let played = 0, won = 0;
+  if(!state.schedule || !state.results) return 0.5;
+  state.schedule.forEach((round, ri) => {
+    const fixtures = round.fixtures || round;
+    fixtures.forEach(f => {
+      if(f.home !== playerId && f.away !== playerId) return;
+      const key = `${ri}_${f.home}_${f.away}`;
+      const result = state.results[key];
+      if(!result || !result.winnerId) return;
+      played++;
+      if(result.winnerId === playerId) won++;
+    });
+  });
+  if(played < 3) return 0.5; // not enough data — assume 50/50
+  return won / played;
+}
+
+function renderOddsDropdowns() {
+  const activePlayers = state.masterPlayers.filter(p => p.active).sort((a,b) => a.name.localeCompare(b.name));
+  ['oddsPlayer1','oddsPlayer2'].forEach(id => {
+    const sel = document.getElementById(id);
+    if(!sel) return;
+    const val = sel.value;
+    sel.innerHTML = '<option value="">Select Player</option>';
+    activePlayers.forEach(p => {
+      sel.innerHTML += `<option value="${p.id}" ${p.id == val ? 'selected' : ''}>${p.name}</option>`;
+    });
+  });
+}
+
+function updateFixtureOdds() {
+  const p1id = parseInt(document.getElementById('oddsPlayer1').value);
+  const p2id = parseInt(document.getElementById('oddsPlayer2').value);
+  const container = document.getElementById('fixtureOddsResult');
+  if(!p1id || !p2id || p1id === p2id) { container.innerHTML = ''; return; }
+
+  const p1 = getPlayerById(p1id);
+  const p2 = getPlayerById(p2id);
+  const p1wr = getWinRate(p1id);
+  const p2wr = getWinRate(p2id);
+
+  // Normalise so they sum to 1
+  const total = p1wr + p2wr;
+  const p1prob = p1wr / total;
+  const p2prob = p2wr / total;
+
+  const p1fav = p1prob > p2prob;
+
+  container.innerHTML = `
+    <div class="odds-matchup">
+      <div class="odds-player-block">
+        <div class="odds-player-name">${p1.name}</div>
+        <div class="odds-fraction">${probToFractional(p1prob)}</div>
+        <div class="odds-pct">${Math.round(p1prob * 100)}% chance</div>
+        ${p1fav ? '<div class="odds-favourite">⭐ Favourite</div>' : ''}
+      </div>
+      <div style="display:flex;align-items:center;font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--text-dim);">VS</div>
+      <div class="odds-player-block">
+        <div class="odds-player-name">${p2.name}</div>
+        <div class="odds-fraction">${probToFractional(p2prob)}</div>
+        <div class="odds-pct">${Math.round(p2prob * 100)}% chance</div>
+        ${!p1fav ? '<div class="odds-favourite">⭐ Favourite</div>' : ''}
+      </div>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:var(--text-dim);text-align:center;">
+      ${p1wr === 0.5 && p2wr === 0.5 ? '⚠️ Insufficient data — showing 50/50' : `Based on season win rates: ${p1.name} ${Math.round(p1wr*100)}% · ${p2.name} ${Math.round(p2wr*100)}%`}
+    </div>`;
+}
+
+function renderSeasonOdds() {
+  const container = document.getElementById('seasonOddsContainer');
+  if(!container) return;
+
+  const activePlayers = state.masterPlayers.filter(p => p.active);
+  if(!activePlayers.length) { container.innerHTML = '<div class="text-muted">No players found.</div>'; return; }
+
+  // Get current standings and win rates
+  const standings = getStandings();
+  const totalRounds = state.schedule ? state.schedule.length : 19;
+  const playedRounds = state.schedule ? state.schedule.filter((round, ri) => {
+    const fixtures = round.fixtures || round;
+    return fixtures.some(f => state.results && state.results[`${ri}_${f.home}_${f.away}`]);
+  }).length : 0;
+  const remainingRounds = totalRounds - playedRounds;
+
+  // Run Monte Carlo simulation to estimate finish positions
+  const SIMULATIONS = 1000;
+  const finishCounts = {}; // playerId -> { 1: n, 2: n, 3: n, 4: n, 5: n }
+  activePlayers.forEach(p => { finishCounts[p.id] = {1:0,2:0,3:0,4:0,5:0}; });
+
+  for(let sim = 0; sim < SIMULATIONS; sim++) {
+    // Start with current points
+    const simPoints = {};
+    standings.forEach(s => simPoints[s.id] = s.points);
+
+    // Simulate remaining fixtures
+    if(state.schedule) {
+      state.schedule.forEach((round, ri) => {
+        const fixtures = round.fixtures || round;
+        fixtures.forEach(f => {
+          const key = `${ri}_${f.home}_${f.away}`;
+          if(state.results && state.results[key]) return; // already played
+          // Simulate based on win rates
+          const p1wr = getWinRate(f.home);
+          const p2wr = getWinRate(f.away);
+          const total = p1wr + p2wr;
+          const p1prob = p1wr / total;
+          const winnerId = Math.random() < p1prob ? f.home : f.away;
+          simPoints[winnerId] = (simPoints[winnerId] || 0) + 1;
+        });
+      });
+    }
+
+    // Rank players for this simulation
+    const ranked = Object.entries(simPoints)
+      .sort(([,a],[,b]) => b - a)
+      .map(([id]) => parseInt(id));
+
+    ranked.forEach((id, idx) => {
+      if(idx < 5 && finishCounts[id]) finishCounts[id][idx + 1]++;
+    });
+  }
+
+  // Build table sorted by P1 probability
+  const playerOdds = activePlayers.map(p => ({
+    player: p,
+    probs: {
+      1: finishCounts[p.id][1] / SIMULATIONS,
+      2: finishCounts[p.id][2] / SIMULATIONS,
+      3: finishCounts[p.id][3] / SIMULATIONS,
+      4: finishCounts[p.id][4] / SIMULATIONS,
+      5: finishCounts[p.id][5] / SIMULATIONS,
+    }
+  })).sort((a,b) => b.probs[1] - a.probs[1]);
+
+  let html = `
+    <div class="card">
+      <table class="season-odds-table">
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Win 🥇</th>
+            <th>2nd 🥈</th>
+            <th>3rd 🥉</th>
+            <th>4th</th>
+            <th>5th</th>
+          </tr>
+        </thead>
+        <tbody>`;
+
+  playerOdds.forEach(({ player, probs }) => {
+    html += `<tr>
+      <td style="font-weight:700;">${player.name}</td>
+      ${[1,2,3,4,5].map(pos => {
+        const prob = probs[pos];
+        const frac = probToFractional(prob);
+        const isLong = prob < 0.05;
+        return `<td class="odds-cell ${isLong ? 'long' : ''}">${prob < 0.005 ? '<span style="color:var(--text-dim);font-size:12px;">—</span>' : frac}</td>`;
+      }).join('')}
+    </tr>`;
+  });
+
+  html += `</tbody></table>
+    <div style="margin-top:12px;font-size:12px;color:var(--text-dim);">Based on ${SIMULATIONS.toLocaleString()} simulated seasons · ${playedRounds} of ${totalRounds} rounds played</div>
+    </div>`;
+
+  container.innerHTML = html;
+}
+
+function renderOdds() {
+  renderOddsDropdowns();
+  updateFixtureOdds();
+  // Show loading state first, then calculate season odds after a short delay
+  const container = document.getElementById('seasonOddsContainer');
+  if(container) container.innerHTML = '<div class="text-muted" style="padding:16px;">⏳ Calculating odds...</div>';
+  setTimeout(renderSeasonOdds, 50);
+}
+
+// ===================== STREAKS =====================
+function getPlayerRecentResults(playerId, limit = 10) {
+  if(!state.schedule || !state.results) return [];
+  const results = [];
+  state.schedule.forEach((round, ri) => {
+    const fixtures = round.fixtures || round;
+    fixtures.forEach(f => {
+      if(f.home !== playerId && f.away !== playerId) return;
+      const key = `${ri}_${f.home}_${f.away}`;
+      const result = state.results[key];
+      if(!result || !result.winnerId) return;
+      results.push({ win: result.winnerId === playerId, round: ri });
+    });
+  });
+  // Sort by round ascending so oldest is first, newest is last
+  results.sort((a, b) => a.round - b.round);
+  return results.slice(-limit);
+}
+
+function getLongestStreak(playerId) {
+  if(!state.schedule || !state.results) return { wins: 0, losses: 0 };
+  const all = [];
+  state.schedule.forEach((round, ri) => {
+    const fixtures = round.fixtures || round;
+    fixtures.forEach(f => {
+      if(f.home !== playerId && f.away !== playerId) return;
+      const key = `${ri}_${f.home}_${f.away}`;
+      const result = state.results[key];
+      if(!result || !result.winnerId) return;
+      all.push(result.winnerId === playerId);
+    });
+  });
+  let maxWin = 0, maxLoss = 0, cur = 0, curType = null;
+  all.forEach(win => {
+    if(curType === null || win !== curType) { cur = 1; curType = win; }
+    else cur++;
+    if(win && cur > maxWin) maxWin = cur;
+    if(!win && cur > maxLoss) maxLoss = cur;
+  });
+  return { wins: maxWin, losses: maxLoss };
+}
+
+function renderStreaks() {
+  const container = document.getElementById('streaksContainer');
+  if(!container) return;
+
+  const activePlayers = state.masterPlayers.filter(p => p.active);
+  if(!activePlayers.length) {
+    container.innerHTML = '<div class="card text-muted">No players found.</div>';
+    return;
+  }
+
+  // Sort by current streak length (hottest first), then alphabetically
+  const playerData = activePlayers.map(p => {
+    const recent = getPlayerRecentResults(p.id, 10);
+    // Calculate current streak
+    let streakCount = 0;
+    let streakType = null;
+    for(let i = recent.length - 1; i >= 0; i--) {
+      if(streakType === null) streakType = recent[i].win;
+      if(recent[i].win === streakType) streakCount++;
+      else break;
+    }
+    return { player: p, recent, streakCount, streakType };
+  });
+
+  playerData.sort((a, b) => {
+    // Hot streaks first, then cold, then no games
+    if(a.recent.length === 0 && b.recent.length === 0) return a.player.name.localeCompare(b.player.name);
+    if(a.recent.length === 0) return 1;
+    if(b.recent.length === 0) return -1;
+    // Sort winning streaks to top, losing to bottom
+    const aScore = a.streakType ? a.streakCount : -a.streakCount;
+    const bScore = b.streakType ? b.streakCount : -b.streakCount;
+    if(bScore !== aScore) return bScore - aScore;
+    return a.player.name.localeCompare(b.player.name);
+  });
+
+  let html = '';
+  playerData.forEach(({ player, recent, streakCount, streakType }) => {
+    // Build 10 balls - most recent on LEFT, empty padding on RIGHT
+    let balls = '';
+    // Reverse so most recent is first (leftmost)
+    const reversed = [...recent].reverse();
+    reversed.forEach(r => {
+      balls += `<span class="streak-ball ${r.win ? 'win' : 'loss'}" title="${r.win ? 'Win' : 'Loss'}"></span>`;
+    });
+    // Pad with empty balls on the right
+    const padCount = 10 - recent.length;
+    for(let i = 0; i < padCount; i++) {
+      balls += `<span class="streak-ball empty"></span>`;
+    }
+
+    // Current streak label
+    let streakLabel = '';
+    let streakClass = 'neutral';
+    if(recent.length > 0 && streakCount > 0) {
+      if(streakType) {
+        streakLabel = `${streakCount}W streak`;
+        streakClass = 'hot';
+      } else {
+        streakLabel = `${streakCount}L streak`;
+        streakClass = 'cold';
+      }
+    } else if(recent.length === 0) {
+      streakLabel = 'No games';
+    }
+
+    const wins = recent.filter(r => r.win).length;
+    const losses = recent.filter(r => !r.win).length;
+
+    const longest = getLongestStreak(player.id);
+    html += `
+      <div class="streak-row">
+        <div class="streak-name">${player.name}</div>
+        <div class="streak-balls">${balls}</div>
+        <div class="streak-summary">${recent.length > 0 ? `${wins}W ${losses}L` : ''}</div>
+        ${streakLabel ? `<span class="streak-current ${streakClass}">${streakLabel}</span>` : ''}
+        ${longest.wins > 0 || longest.losses > 0 ? `<span style="font-size:11px;color:var(--text-dim);margin-left:4px;">Best: ${longest.wins}W / Worst: ${longest.losses}L</span>` : ''}
+      </div>`;
+  });
+
+  container.innerHTML = html || '<div class="text-muted">No results recorded yet.</div>';
+}
+
+// ===================== CATCH UPS =====================
+function getCatchUpCount() {
+  if(!state.catchUps) return 0;
+  return state.catchUps.filter(cu => !state.results[cu.fixtureKey]).length;
+}
+
+function updateCatchUpBadge() {
+  const count = getCatchUpCount();
+  ['catchupBadge', 'catchupBadgeMob'].forEach(id => {
+    const badge = document.getElementById(id);
+    if(!badge) return;
+    if(count > 0) { badge.textContent = count; badge.style.display = 'inline-flex'; }
+    else { badge.style.display = 'none'; }
+  });
+}
+
+function renderCatchUps() {
+  const container = document.getElementById('catchupsContainer');
+  if(!container) return;
+  if(!state.catchUps || state.catchUps.length === 0) {
+    container.innerHTML = '<div class="card text-muted">No catch up fixtures yet. Use Admin → Season to move unplayed fixtures here after each round night.</div>';
+    updateCatchUpBadge();
+    return;
+  }
+
+  // Only show pending (unplayed) catch ups
+  const sorted = [...state.catchUps].sort((a, b) => {
+    if(a.originalDate && b.originalDate) return a.originalDate.localeCompare(b.originalDate);
+    return a.roundIndex - b.roundIndex;
+  });
+
+  const pending = sorted.filter(cu => !state.results[cu.fixtureKey]);
+
+  if(pending.length === 0) {
+    container.innerHTML = '<div class="card text-muted">No outstanding catch up fixtures — all played! 🎉</div>';
+    updateCatchUpBadge();
+    return;
+  }
+
+  let html = `<div class="round-header" style="border-left-color:var(--red);color:var(--red);">Outstanding — ${pending.length} unplayed</div>`;
+  pending.forEach(cu => {
+    const home = getPlayerById(cu.home);
+    const away = getPlayerById(cu.away);
+    if(!home || !away) return;
+    const originLabel = cu.originalDate ? formatDate(cu.originalDate) : `Round ${cu.roundIndex + 1}`;
+    html += `
+      <div class="fixture-row">
+        <span class="fixture-player">${home.name}</span>
+        <span class="fixture-vs">vs</span>
+        <span class="fixture-player right">${away.name}</span>
+        <span class="catchup-origin">From: ${originLabel}</span>
+      </div>`;
+  });
+
+  container.innerHTML = html;
+  updateCatchUpBadge();
+}
+
+function renderCatchUpRoundSelect() {
+  const sel = document.getElementById('catchupRoundSelect');
+  if(!sel || !state.schedule) return;
+  const currentVal = sel.value;
+  sel.innerHTML = '<option value="">Select Round</option>';
+  state.schedule.forEach((round, ri) => {
+    const fixtures = round.fixtures || round;
+    const unplayed = fixtures.filter(f => {
+      const key = `${ri}_${f.home}_${f.away}`;
+      const alreadyMoved = state.catchUps && state.catchUps.find(cu => cu.fixtureKey === key);
+      return !state.results[key] && !alreadyMoved;
+    });
+    if(unplayed.length > 0) {
+      const dateLabel = round.date ? ` — ${formatDate(round.date)}` : '';
+      sel.innerHTML += `<option value="${ri}">Round ${ri + 1}${dateLabel} (${unplayed.length} unplayed)</option>`;
+    }
+  });
+  if(currentVal) sel.value = currentVal;
+}
+
+document.addEventListener('change', function(e) {
+  if(e.target.id === 'catchupRoundSelect') {
+    const ri = parseInt(e.target.value);
+    const preview = document.getElementById('catchupPreview');
+    if(isNaN(ri)) { preview.innerHTML = ''; return; }
+    const round = state.schedule[ri];
+    const fixtures = round.fixtures || round;
+    const unplayed = fixtures.filter(f => {
+      const key = `${ri}_${f.home}_${f.away}`;
+      const alreadyMoved = state.catchUps && state.catchUps.find(cu => cu.fixtureKey === key);
+      return !state.results[key] && !alreadyMoved;
+    });
+    if(unplayed.length === 0) {
+      preview.innerHTML = '<div class="alert alert-info">No unplayed fixtures to move in this round.</div>';
+      return;
+    }
+    let html = `<div class="alert alert-info">${unplayed.length} fixture${unplayed.length !== 1 ? 's' : ''} will be moved to Catch Ups:<br><br>`;
+    unplayed.forEach(f => {
+      const home = getPlayerById(f.home);
+      const away = getPlayerById(f.away);
+      html += `<span style="display:block;padding:2px 0;">${home.name} vs ${away.name}</span>`;
+    });
+    html += '</div>';
+    preview.innerHTML = html;
+  }
+});
+
+function moveToCatchUps() {
+  const ri = parseInt(document.getElementById('catchupRoundSelect').value);
+  const alertDiv = document.getElementById('seasonAlert');
+  if(isNaN(ri)) {
+    alertDiv.innerHTML = '<div class="alert alert-error">Please select a round.</div>';
+    return;
+  }
+  const round = state.schedule[ri];
+  const fixtures = round.fixtures || round;
+  if(!state.catchUps) state.catchUps = [];
+
+  let moved = 0;
+  fixtures.forEach(f => {
+    const key = `${ri}_${f.home}_${f.away}`;
+    const alreadyMoved = state.catchUps.find(cu => cu.fixtureKey === key);
+    if(!state.results[key] && !alreadyMoved) {
+      state.catchUps.push({
+        roundIndex: ri,
+        fixtureKey: key,
+        home: f.home,
+        away: f.away,
+        originalDate: round.date || null,
+        addedDate: new Date().toISOString().split('T')[0]
+      });
+      moved++;
+    }
+  });
+
+  if(moved === 0) {
+    alertDiv.innerHTML = '<div class="alert alert-info">No new unplayed fixtures to move — they may already be in Catch Ups.</div>';
+    return;
+  }
+
+  saveState();
+  renderAll();
+  document.getElementById('catchupRoundSelect').value = '';
+  document.getElementById('catchupPreview').innerHTML = '';
+  alertDiv.innerHTML = `<div class="alert alert-success">${moved} fixture${moved !== 1 ? 's' : ''} moved to Catch Ups.</div>`;
+  setTimeout(() => alertDiv.innerHTML = '', 4000);
+}
+
+// ===================== MATCH NIGHT =====================
+function renderMatchNightRoundSelect() {
+  const sel = document.getElementById('matchnightRound');
+  if(!sel || !state.schedule) return;
+  sel.innerHTML = '<option value="">Select Round</option>';
+  state.schedule.forEach((round, ri) => {
+    const dateLabel = round.date ? ` — ${formatDate(round.date)}` : '';
+    sel.innerHTML += `<option value="${ri}">Round ${ri + 1}${dateLabel}</option>`;
+  });
+}
+
+function renderMatchNight() {
+  const ri = parseInt(document.getElementById('matchnightRound').value);
+  const container = document.getElementById('matchnightContainer');
+  if(isNaN(ri) || !state.schedule || !state.schedule[ri]) {
+    container.innerHTML = '';
+    return;
+  }
+
+  const round = state.schedule[ri];
+  const fixtures = round.fixtures || round;
+  const dateLabel = round.date ? formatDate(round.date) : '';
+  if(!state.results) state.results = {};
+
+  const played = fixtures.filter(f => !!state.results[`${ri}_${f.home}_${f.away}`]);
+  const unplayed = fixtures.filter(f => !state.results[`${ri}_${f.home}_${f.away}`]);
+  const catchupFixtures = unplayed.filter(f => state.catchUps && state.catchUps.find(cu => cu.fixtureKey === `${ri}_${f.home}_${f.away}`));
+
+  // Killer games this round
+  const killerThisRound = (state.killerGames || []).filter(g => g.roundIndex === ri);
+  // Flukes this round - we don't track per round so show all
+  const standings = getStandings();
+
+  let html = '';
+
+  // Round summary bar
+  html += `<div class="card" style="margin-bottom:16px;display:flex;gap:20px;flex-wrap:wrap;align-items:center;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold-light);">Round ${ri + 1}</div>
+    ${dateLabel ? `<div style="color:var(--text-dim);">${dateLabel}</div>` : ''}
+    <div style="margin-left:auto;display:flex;gap:12px;flex-wrap:wrap;">
+      <span class="alert alert-success" style="padding:4px 12px;margin:0;">✅ ${played.length} played</span>
+      ${unplayed.length > 0 ? `<span class="alert alert-error" style="padding:4px 12px;margin:0;">⏳ ${unplayed.length} remaining</span>` : ''}
+    </div>
+  </div>`;
+
+  // Results
+  html += `<div class="matchnight-section-title">Results</div>`;
+  if(played.length === 0) {
+    html += '<div class="text-muted" style="padding:8px 0 16px;">No results entered for this round yet.</div>';
+  } else {
+    played.forEach(f => {
+      const key = `${ri}_${f.home}_${f.away}`;
+      const result = state.results[key];
+      const home = getPlayerById(f.home);
+      const away = getPlayerById(f.away);
+      const homeWon = result.winnerId === f.home;
+      html += `<div class="fixture-row completed" style="margin-bottom:8px;">
+        <span class="fixture-player ${homeWon ? 'winner-highlight' : ''}">${home.name}</span>
+        <span class="fixture-score">${homeWon ? '1' : '0'} - ${homeWon ? '0' : '1'}</span>
+        <span class="fixture-player right ${!homeWon ? 'winner-highlight' : ''}">${away.name}</span>
+      </div>`;
+    });
+  }
+
+  // Unplayed
+  if(unplayed.length > 0) {
+    html += `<div class="matchnight-section-title">Still to Play</div>`;
+    unplayed.forEach(f => {
+      const home = getPlayerById(f.home);
+      const away = getPlayerById(f.away);
+      const isCatchup = state.catchUps && state.catchUps.find(cu => cu.fixtureKey === `${ri}_${f.home}_${f.away}`);
+      html += `<div class="fixture-row ${isCatchup ? 'moved-to-catchup' : ''}" style="margin-bottom:8px;">
+        <span class="fixture-player">${home.name}</span>
+        <span class="fixture-vs">vs</span>
+        <span class="fixture-player right">${away.name}</span>
+        ${isCatchup ? '<span class="moved-label">Catch Up</span>' : ''}
+      </div>`;
+    });
+  }
+
+  // Killer
+  if(killerThisRound.length > 0) {
+    html += `<div class="matchnight-section-title">Killer 🎱</div>`;
+    killerThisRound.forEach(game => {
+      const winner = getPlayerById(game.winnerId);
+      html += `<div class="fixture-row" style="margin-bottom:8px;">
+        <span style="font-weight:700;">🏆 ${winner ? winner.name : 'Unknown'} wins £${game.pot.toFixed(2)}</span>
+        <span style="color:var(--text-dim);font-size:13px;">${game.playerIds.length} players entered</span>
+      </div>`;
+    });
+  }
+
+  // Standings snapshot
+  html += `<div class="matchnight-section-title">Current Standings</div>`;
+  html += `<div class="card" style="padding:0;overflow:hidden;">
+    <table class="standings-table">
+      <thead><tr><th>#</th><th>Player</th><th>W</th><th>L</th><th>Pts</th></tr></thead>
+      <tbody>`;
+  standings.slice(0, 5).forEach((p, i) => {
+    const pos = i + 1;
+    const posClass = pos <= 3 ? `pos-${pos}` : pos === 4 ? 'pos-4' : 'pos-5';
+    const posContent = pos <= 3 ? pos : '🏵️';
+    html += `<tr>
+      <td><span class="pos-badge ${posClass}">${posContent}</span></td>
+      <td style="font-weight:600;">${p.name}</td>
+      <td style="color:var(--green-light);font-weight:700;">${p.won}</td>
+      <td style="color:var(--red);">${p.lost}</td>
+      <td style="font-weight:700;color:var(--gold-light);">${p.points}</td>
+    </tr>`;
+  });
+  html += `</tbody></table></div>`;
+
+  container.innerHTML = html;
+}
+
+// ===================== AWARDS =====================
+function renderAwards() {
+  renderArchive();
+  const awardsContainer = document.getElementById('awardsContainer');
+  if(!awardsContainer) return;
+
+  const activePlayers = state.masterPlayers.filter(p => p.active);
+  const standings = getStandings();
+  if(!state.results || Object.keys(state.results).length === 0) {
+    awardsContainer.innerHTML = '<div class="card text-muted">Awards will appear once results have been entered.</div>';
+    return;
+  }
+
+  const awards = [];
+
+  // League Leader
+  if(standings[0] && standings[0].points > 0) {
+    awards.push({ emoji: '👑', title: 'League Leader', winner: standings[0].name, detail: `${standings[0].points} points` });
+  }
+
+  // Most Wins
+  const mostWins = [...standings].sort((a,b) => b.won - a.won)[0];
+  if(mostWins && mostWins.won > 0) {
+    awards.push({ emoji: '🎯', title: 'Most Wins', winner: mostWins.name, detail: `${mostWins.won} wins` });
+  }
+
+  // Best Win Rate (min 5 games)
+  const bestRate = standings.filter(p => p.played >= 5).sort((a,b) => (b.won/b.played) - (a.won/a.played))[0];
+  if(bestRate) {
+    awards.push({ emoji: '📈', title: 'Best Win Rate', winner: bestRate.name, detail: `${Math.round((bestRate.won/bestRate.played)*100)}% (min 5 games)` });
+  }
+
+  // Biggest Winning Streak
+  let bestStreakPlayer = null, bestStreakCount = 0;
+  activePlayers.forEach(p => {
+    const { wins } = getLongestStreak(p.id);
+    if(wins > bestStreakCount) { bestStreakCount = wins; bestStreakPlayer = p; }
+  });
+  if(bestStreakPlayer && bestStreakCount > 0) {
+    awards.push({ emoji: '🔥', title: 'Best Winning Streak', winner: bestStreakPlayer.name, detail: `${bestStreakCount} wins in a row` });
+  }
+
+  // Killer King — most Killer wins
+  if(state.killerGames && state.killerGames.length > 0) {
+    const killerWins = {};
+    state.killerGames.forEach(g => { killerWins[g.winnerId] = (killerWins[g.winnerId] || 0) + 1; });
+    const topKiller = Object.entries(killerWins).sort(([,a],[,b]) => b - a)[0];
+    if(topKiller) {
+      const p = getPlayerById(parseInt(topKiller[0]));
+      if(p) awards.push({ emoji: '🎱', title: 'Killer King', winner: p.name, detail: `${topKiller[1]} Killer win${topKiller[1] !== 1 ? 's' : ''}` });
+    }
+  }
+
+  // Biggest Killer earner
+  if(state.killerGames && state.killerGames.length > 0) {
+    const earnings = {};
+    state.killerGames.forEach(g => {
+      g.playerIds.forEach(pid => { earnings[pid] = (earnings[pid] || { paid: 0, won: 0 }); earnings[pid].paid += 5; });
+      earnings[g.winnerId] = earnings[g.winnerId] || { paid: 0, won: 0 };
+      earnings[g.winnerId].won += g.pot;
+    });
+    const topEarner = Object.entries(earnings).map(([id, e]) => ({ id, net: e.won - e.paid })).sort((a,b) => b.net - a.net)[0];
+    if(topEarner && topEarner.net > 0) {
+      const p = getPlayerById(parseInt(topEarner.id));
+      if(p) awards.push({ emoji: '💰', title: 'Killer Banker', winner: p.name, detail: `+£${topEarner.net.toFixed(2)} net profit` });
+    }
+  }
+
+  // Most Flukes
+  if(state.flukes && state.flukes.length > 0) {
+    let topFluker = null, topFlukePoints = 0;
+    activePlayers.forEach(p => {
+      const stats = getFlukeStatsForPlayer(p.id);
+      if(stats.points > topFlukePoints) { topFlukePoints = stats.points; topFluker = p; }
+    });
+    if(topFluker) awards.push({ emoji: '😏', title: 'Flukey Cunt of the Season', winner: topFluker.name, detail: `${topFlukePoints} fluke points` });
+  }
+
+  // Most Improved (best win rate in last 5 vs first 5 games)
+  let mostImproved = null, bestImprovement = 0;
+  activePlayers.forEach(p => {
+    const all = [];
+    if(state.schedule) state.schedule.forEach((round, ri) => {
+      const fixtures = round.fixtures || round;
+      fixtures.forEach(f => {
+        if(f.home !== p.id && f.away !== p.id) return;
+        const key = `${ri}_${f.home}_${f.away}`;
+        const result = state.results[key];
+        if(!result || !result.winnerId) return;
+        all.push(result.winnerId === p.id);
+      });
+    });
+    if(all.length < 8) return;
+    const first5 = all.slice(0, 5).filter(Boolean).length / 5;
+    const last5 = all.slice(-5).filter(Boolean).length / 5;
+    const improvement = last5 - first5;
+    if(improvement > bestImprovement) { bestImprovement = improvement; mostImproved = p; }
+  });
+  if(mostImproved && bestImprovement > 0) {
+    awards.push({ emoji: '📊', title: 'Most Improved', winner: mostImproved.name, detail: `${Math.round(bestImprovement * 100)}% improvement in win rate` });
+  }
+
+  // Iron Man — most games played
+  const ironMan = [...standings].sort((a,b) => b.played - a.played)[0];
+  if(ironMan && ironMan.played > 0) {
+    awards.push({ emoji: '💪', title: 'Iron Man', winner: ironMan.name, detail: `${ironMan.played} games played` });
+  }
+
+  let html = '<div class="awards-grid">';
+  awards.forEach(a => {
+    html += `<div class="award-card">
+      <div class="award-emoji">${a.emoji}</div>
+      <div class="award-title">${a.title}</div>
+      <div class="award-winner">${a.winner}</div>
+      <div class="award-detail">${a.detail}</div>
+    </div>`;
+  });
+  html += '</div>';
+  if(awards.length === 0) html = '<div class="card text-muted">No awards to show yet.</div>';
+  awardsContainer.innerHTML = html;
+}
+
+// ===================== RIVALRIES =====================
+function renderRivalries() {
+  const container = document.getElementById('rivalriesContainer');
+  if(!container) return;
+
+  const activePlayers = state.masterPlayers.filter(p => p.active);
+  const rivalries = [];
+
+  // Find all pairs who have played each other
+  for(let i = 0; i < activePlayers.length; i++) {
+    for(let j = i + 1; j < activePlayers.length; j++) {
+      const p1 = activePlayers[i];
+      const p2 = activePlayers[j];
+      const { wins, losses } = getH2HRecord(p1.id, p2.id);
+      const total = wins + losses;
+      if(total === 0) continue;
+      // Closeness score — more games + closer result = better rivalry
+      const diff = Math.abs(wins - losses);
+      const closeness = total * 10 - diff * 5;
+      rivalries.push({ p1, p2, p1wins: wins, p2wins: losses, total, closeness });
+    }
+  }
+
+  if(rivalries.length === 0) {
+    container.innerHTML = '<div class="card text-muted">No rivalries yet — results need to be entered first.</div>';
+    return;
+  }
+
+  // Sort by closeness (closest + most played first)
+  rivalries.sort((a,b) => b.closeness - a.closeness);
+  const top = rivalries.slice(0, 10);
+
+  let html = '';
+  top.forEach((r, idx) => {
+    const p1leading = r.p1wins > r.p2wins;
+    const tied = r.p1wins === r.p2wins;
+    const leaderName = tied ? 'Level' : (p1leading ? r.p1.name : r.p2.name);
+    const badgeText = tied ? '⚖️ All Square' : `${leaderName} leads`;
+    html += `<div class="rivalry-card">
+      <div style="font-size:20px;min-width:28px;">${idx === 0 ? '🔥' : idx === 1 ? '⚔️' : '🎱'}</div>
+      <div class="rivalry-players">
+        <span style="color:${r.p1wins >= r.p2wins ? 'var(--gold-light)' : 'var(--text-dim)'}">${r.p1.name}</span>
+        <span style="color:var(--text-dim);font-weight:400;font-size:13px;"> vs </span>
+        <span style="color:${r.p2wins >= r.p1wins ? 'var(--gold-light)' : 'var(--text-dim)'}">${r.p2.name}</span>
+      </div>
+      <div class="rivalry-score">${r.p1wins} — ${r.p2wins}</div>
+      <div>
+        <span class="rivalry-badge">${badgeText}</span>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:4px;text-align:center;">${r.total} game${r.total !== 1 ? 's' : ''} played</div>
+      </div>
+    </div>`;
+  });
+  container.innerHTML = html;
+}
+
+// ===================== EXCEL EXPORT =====================
+function exportToExcel() {
+  // Load SheetJS dynamically if not already loaded
+  if(typeof XLSX === 'undefined') {
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    script.onload = () => buildExcelFile();
+    document.head.appendChild(script);
+  } else {
+    buildExcelFile();
+  }
+}
+
+function buildExcelFile() {
+  const wb = XLSX.utils.book_new();
+
+  // ── FIXTURES SHEET ──────────────────────────────────
+  const wsData = [];
+  const seasonLabel = `Season ${state.season}`;
+  const startDate = state.seasonStartDate ? formatDate(state.seasonStartDate) : 'TBC';
+  const lastRound = state.schedule && state.schedule[state.schedule.length - 1];
+  const endDate = lastRound && lastRound.date ? formatDate(lastRound.date) : 'TBC';
+
+  // Header rows
+  wsData.push(['CBMT SINGLES POOL LEAGUE', '', '', '', '', '', '', '', '', '']);
+  wsData.push([seasonLabel, '', '', '', '', '', '', '', '', '']);
+  wsData.push([`START DATE: ${startDate}`, '', '', '', '', `END DATE: ${endDate}`, '', '', '', '']);
+  wsData.push([]); // blank row
+
+  // Round headers row — 3 rounds per row to match your format
+  const ROUNDS_PER_ROW = 3;
+  const COL_WIDTH = 9; // columns per round block
+
+  if(!state.schedule || state.schedule.length === 0) {
+    wsData.push(['No schedule generated yet.']);
+  } else {
+    for(let rowStart = 0; rowStart < state.schedule.length; rowStart += ROUNDS_PER_ROW) {
+      const roundsInThisRow = state.schedule.slice(rowStart, rowStart + ROUNDS_PER_ROW);
+
+      // Week labels
+      const weekRow = [];
+      roundsInThisRow.forEach((round, i) => {
+        const roundNum = rowStart + i + 1;
+        const dateLabel = round.date ? formatDate(round.date) : '';
+        weekRow.push(`ROUND ${roundNum}`, '', dateLabel, '', '', '', '', '', '');
+        if(i < roundsInThisRow.length - 1) weekRow.push('');
+      });
+      wsData.push(weekRow);
+
+      // Column headers
+      const headerRow = [];
+      roundsInThisRow.forEach((_, i) => {
+        headerRow.push('PLAYER 1', '', '', 'W/L', '', 'W/L', 'PLAYER 2', '', '');
+        if(i < roundsInThisRow.length - 1) headerRow.push('');
+      });
+      wsData.push(headerRow);
+
+      // Find max fixtures across rounds in this row
+      const maxFixtures = Math.max(...roundsInThisRow.map(r => (r.fixtures || r).length));
+
+      // Fixture rows
+      for(let fi = 0; fi < maxFixtures; fi++) {
+        const fixtureRow = [];
+        roundsInThisRow.forEach((round, ri) => {
+          const fixtures = round.fixtures || round;
+          const fixture = fixtures[fi];
+          if(fixture) {
+            const home = getPlayerById(fixture.home);
+            const away = getPlayerById(fixture.away);
+            const roundIdx = rowStart + ri;
+            const key = `${roundIdx}_${fixture.home}_${fixture.away}`;
+            const result = state.results && state.results[key];
+            let homeWL = '', awayWL = '';
+            if(result && result.winnerId) {
+              homeWL = result.winnerId === fixture.home ? 'W' : 'L';
+              awayWL = result.winnerId === fixture.away ? 'W' : 'L';
+            }
+            fixtureRow.push(
+              home ? home.name : '', '', '',
+              homeWL, '',
+              awayWL,
+              away ? away.name : '', '', ''
+            );
+          } else {
+            fixtureRow.push('', '', '', '', '', '', '', '', '');
+          }
+          if(ri < roundsInThisRow.length - 1) fixtureRow.push('');
+        });
+        wsData.push(fixtureRow);
+      }
+
+      // Spacer rows between round groups
+      wsData.push([]);
+      wsData.push([]);
+    }
+  }
+
+  // Footer note
+  wsData.push([]);
+  wsData.push(['This is a hard copy of the fixtures. Please record results in the W/L columns.']);
+  wsData.push([`The league can be viewed online at: https://cbmt-league.github.io/cbmt-league/`]);
+  wsData.push(['Should results be recorded here manually, please ensure they are also updated online.']);
+  wsData.push(['20 players · 19 rounds · 10 fixtures per round · every player plays every week']);
+
+  const wsFixtures = XLSX.utils.aoa_to_sheet(wsData);
+
+  // Set column widths
+  wsFixtures['!cols'] = Array(30).fill({ wch: 16 });
+
+  XLSX.utils.book_append_sheet(wb, wsFixtures, 'FIXTURES');
+
+  // ── STANDINGS SHEET ──────────────────────────────────
+  const standings = getStandings();
+  const standingsData = [
+    ['CBMT SINGLES POOL LEAGUE — STANDINGS', '', '', '', '', ''],
+    [seasonLabel, '', '', '', '', ''],
+    [],
+    ['#', 'PLAYER', 'PLAYED', 'WON', 'LOST', 'POINTS']
+  ];
+  standings.forEach((p, i) => {
+    standingsData.push([i + 1, p.name, p.played, p.won, p.lost, p.points]);
+  });
+  const wsStandings = XLSX.utils.aoa_to_sheet(standingsData);
+  wsStandings['!cols'] = [{ wch: 5 }, { wch: 20 }, { wch: 8 }, { wch: 8 }, { wch: 8 }, { wch: 8 }];
+  XLSX.utils.book_append_sheet(wb, wsStandings, 'STANDINGS');
+
+  // ── PLAYERS SHEET ──────────────────────────────────
+  const playersData = [
+    ['CBMT SINGLES POOL LEAGUE — PLAYERS', ''],
+    [seasonLabel, ''],
+    [],
+    ['ACTIVE PLAYERS', ''],
+  ];
+  const active = state.masterPlayers.filter(p => p.active).sort((a,b) => a.name.localeCompare(b.name));
+  active.forEach(p => playersData.push([p.name, '']));
+  const wsPlayers = XLSX.utils.aoa_to_sheet(playersData);
+  wsPlayers['!cols'] = [{ wch: 25 }, { wch: 15 }];
+  XLSX.utils.book_append_sheet(wb, wsPlayers, 'PLAYERS');
+
+  // ── WRITE FILE ──────────────────────────────────
+  const filename = `CBMT_Pool_League_Season${state.season}_${new Date().toISOString().split('T')[0]}.xlsx`;
+  XLSX.writeFile(wb, filename);
+
+  document.getElementById('seasonAlert').innerHTML = `<div class="alert alert-success">✅ Excel sheet downloaded as ${filename}</div>`;
+  setTimeout(() => document.getElementById('seasonAlert').innerHTML = '', 4000);
+}
+
+// ===================== SEASON ARCHIVE =====================
+function showAwardsTab(tab) {
+  document.getElementById('awards-current').style.display = tab === 'current' ? 'block' : 'none';
+  document.getElementById('awards-archive').style.display = tab === 'archive' ? 'block' : 'none';
+  document.getElementById('awards-tab-current').className = tab === 'current' ? 'btn btn-primary' : 'btn btn-secondary';
+  document.getElementById('awards-tab-archive').className = tab === 'archive' ? 'btn btn-primary' : 'btn btn-secondary';
+  if(tab === 'archive') renderArchive();
+}
+
+function renderArchive() {
+  const container = document.getElementById('archiveContainer');
+  if(!container) return;
+  if(!state.seasonArchives || state.seasonArchives.length === 0) {
+    container.innerHTML = '<div class="card text-muted">No season records yet. Once a season ends, use Admin → Season Archive to record the results.</div>';
+    return;
+  }
+
+  const sorted = [...state.seasonArchives].sort((a,b) => b.season - a.season);
+  let html = '';
+
+  sorted.forEach(archive => {
+    const medalEmojis = ['🥇','🥈','🥉','🏵️','🏵️'];
+    const standings = archive.standings || [];
+
+    html += `
+      <div class="card" style="margin-bottom:20px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold-light);letter-spacing:2px;margin-bottom:16px;border-bottom:2px solid var(--green);padding-bottom:10px;">
+          Season ${archive.season} — Final Table
+        </div>
+
+        <table class="standings-table" style="margin-bottom:16px;">
+          <thead>
+            <tr>
+              <th style="width:44px;">#</th>
+              <th>Player</th>
+              <th>P</th>
+              <th>W</th>
+              <th>L</th>
+              <th>Pts</th>
+              <th>Prize</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${standings.map((p, i) => {
+              const pos = i + 1;
+              const posClass = pos <= 3 ? `pos-${pos}` : pos <= 5 ? `pos-${pos}` : '';
+              const posContent = pos <= 3 ? pos : pos <= 5 ? '🏵️' : pos;
+              return `<tr>
+                <td><span class="pos-badge ${posClass}">${posContent}</span></td>
+                <td style="font-weight:600;">${p.name}</td>
+                <td>${p.played}</td>
+                <td style="color:var(--green-light);font-weight:700;">${p.won}</td>
+                <td style="color:var(--red);">${p.lost}</td>
+                <td style="font-weight:700;color:var(--gold-light);">${p.points}</td>
+                <td style="color:var(--green-light);font-weight:700;">${p.prize ? '£' + parseFloat(p.prize).toFixed(2) : ''}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+
+        ${archive.killerKing ? `
+          <div style="padding:12px 16px;background:rgba(0,0,0,0.2);border-radius:8px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:24px;">🎱</span>
+            <div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold);">Killer King</div>
+              <div style="font-weight:700;font-size:16px;">${archive.killerKing} <span style="color:var(--text-dim);font-size:13px;font-weight:400;">${archive.killerKingWins ? `(${archive.killerKingWins} wins)` : ''}</span></div>
+            </div>
+          </div>` : ''}
+
+        ${adminLoggedIn ? `<button class="btn btn-danger" style="margin-top:12px;font-size:12px;padding:6px 12px;" onclick="deleteSeasonArchive(${archive.season})">Delete Record</button>` : ''}
+      </div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+async function saveSeasonArchive() {
+  const alertDiv = document.getElementById('archiveAlert');
+  const season = document.getElementById('archiveSeason').value.trim();
+
+  if(!season) {
+    alertDiv.innerHTML = '<div class="alert alert-error">Please enter a season name.</div>';
+    setTimeout(() => alertDiv.innerHTML = '', 3000);
+    return;
+  }
+
+  alertDiv.innerHTML = '<div class="alert alert-info">⏳ Saving...</div>';
+
+  // Snapshot current full standings
+  const currentStandings = getStandings();
+  const prizes = {};
+  for(let i = 1; i <= 5; i++) {
+    const prize = document.getElementById(`archivePrize${i}`).value;
+    if(prize) prizes[i] = parseFloat(prize);
+  }
+
+  const killerKing = document.getElementById('archiveKillerKing').value.trim();
+  const killerKingWins = document.getElementById('archiveKillerWins').value;
+
+  if(!state.seasonArchives) state.seasonArchives = [];
+
+  const record = {
+    season,
+    standings: currentStandings.map((p, i) => ({
+      pos: i + 1,
+      name: p.name,
+      played: p.played,
+      won: p.won,
+      lost: p.lost,
+      points: p.points,
+      prize: prizes[i + 1] || null
+    })),
+    killerKing: killerKing || null,
+    killerKingWins: killerKingWins || null
+  };
+
+  const existing = state.seasonArchives.findIndex(a => a.season === season);  if(existing >= 0) state.seasonArchives[existing] = record;
+  else state.seasonArchives.push(record);
+
+  await saveState();
+
+  // Clear form
+  document.getElementById('archiveSeason').value = '';
+  for(let i = 1; i <= 5; i++) document.getElementById(`archivePrize${i}`).value = '';
+  document.getElementById('archiveKillerKing').value = '';
+  document.getElementById('archiveKillerWins').value = '';
+
+  alertDiv.innerHTML = `<div class="alert alert-success">✅ Season ${season} record saved with full standings!</div>`;
+  setTimeout(() => alertDiv.innerHTML = '', 4000);
+}
+
+async function deleteSeasonArchive(season) {
+  if(!confirm(`Delete the Season ${season} record? This cannot be undone.`)) return;
+  state.seasonArchives = state.seasonArchives.filter(a => a.season !== season);
+  await saveState();
+  renderArchive();
+}
+
+// ===================== CONFIRM MODAL =====================
+let confirmCallback = null;
+function showConfirm(title, message, callback) {
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMessage').textContent = message;
+  confirmCallback = callback;
+  document.getElementById('confirmModal').classList.add('open');
+  document.getElementById('confirmYes').onclick = async () => {
+    const cb = confirmCallback;
+    closeConfirm();
+    if(cb) await cb();
+  };
+}
+function closeConfirm() {
+  document.getElementById('confirmModal').classList.remove('open');
+  confirmCallback = null;
+}
+
+// ===================== NAV =====================
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobileMenu');
+  const btn = document.getElementById('hamburgerBtn');
+  menu.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.mobile-menu-inner button').forEach(b => b.classList.remove('active'));
+  document.getElementById(`sec-${name}`).classList.add('active');
+
+  // Highlight correct button in desktop nav
+  const navBtns = document.querySelectorAll('nav button');
+  navBtns.forEach(b => { if(b.getAttribute('onclick') && b.getAttribute('onclick').includes(`'${name}'`)) b.classList.add('active'); });
+
+  // Highlight correct button in mobile menu
+  const mobBtn = document.getElementById(`mob-${name}`);
+  if(mobBtn) mobBtn.classList.add('active');
+
+  // Close mobile menu
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('hamburgerBtn').classList.remove('open');
+
+  if(name === 'h2h') renderH2HDropdowns();
+  if(name === 'catchups') renderCatchUps();
+  if(name === 'streaks') renderStreaks();
+  if(name === 'odds') renderOdds();
+  if(name === 'killer') renderKiller();
+  if(name === 'flukes') renderFlukes();
+  if(name === 'matchnight') { renderMatchNightRoundSelect(); renderMatchNight(); }
+  if(name === 'awards') renderAwards();
+  if(name === 'rivalries') renderRivalries();
+}
+
+// ===================== UTILITIES =====================
+function getPlayerById(id) {
+  return state.masterPlayers.find(p => p.id == id);
+}
+
+// ===================== INIT =====================
+loadState(); // async — renders when data arrives
+
+// Register service worker
+if('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+</script>
+
+</body>
+</html>
